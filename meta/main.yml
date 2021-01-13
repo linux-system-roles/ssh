@@ -4,7 +4,7 @@ galaxy_info:
   # Replace with role's author name:
   author: John Doe <jdoe@corp.com>
   # Replace with the real description of what is role's purpose:
-  description: Basic template for Linux system roles
+  description: An Ansible role for managing ssh clients
   # Replace with the company the role's author is member of:
   company: John Doe, Inc.
 
@@ -53,7 +53,9 @@ galaxy_info:
         - all
     - name: EL
       versions:
-        - all
+        - 6
+        - 7
+        - 8
 
   galaxy_tags: []
   # List tags for your role here, one per line. A tag is a keyword that

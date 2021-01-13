@@ -5,6 +5,6 @@
 # value in a platform/version specific file in vars/
 
 # Examples of non-distribution specific (generic) internal variables:
-__template_foo_config: "foo.conf"
-__template_packages: []
-__template_services: []
+__ssh_foo_config: "ssh.conf"
+__ssh_packages: []
+__ssh_services: []

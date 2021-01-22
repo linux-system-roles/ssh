@@ -1,8 +1,25 @@
-# SPDX-License-Identifier: MIT
 ---
-# Here is the right place to put the role's input variables.
-# This file also serves as a documentation for such a variables.
+# Whether to change global configuration or per-user one
+ssh_user: null
 
-# Examples of role input variables:
-ssh_foo: "foo"
-ssh_bar: "bar"
+# Use default OS values or start from scratch
+# (for per-user configuration or included files in drop-in directories)
+ssh_skip_defaults: auto
+
+# The name to be used as part of filename in drop-in directory
+ssh_drop_in_name: false
+
+# dict of configuration options
+ssh: []
+
+# list of additional packages to install
+# for exmaple openssh-keycat or openssh-askpass
+ssh_additional_packages: []
+
+# the override values for the owner, group and mode of configuration file
+ssh_config_owner: null
+ssh_config_group: null
+ssh_config_mode: null
+
+# the override for the configuration file we are writing
+ssh_config_file: null

@@ -1,10 +1,8 @@
-# SPDX-License-Identifier: MIT
----
-# Put the role's internal variables here that are not distribution specific.
-# You can override these by defining the same variable with a different
-# value in a platform/version specific file in vars/
+########## Internal defaults ##########
+# default list of mandatory packages
+__ssh_packages: [ 'openssh', 'openssh-clients']
+__ssh_drop_in_template: /etc/ssh/ssh_config.d/{name}.conf
 
-# Examples of non-distribution specific (generic) internal variables:
-__ssh_foo_config: "ssh.conf"
-__ssh_packages: []
-__ssh_services: []
+# support flags
+__ssh_supports_drop_in: false
+__ssh_supports_validate: true

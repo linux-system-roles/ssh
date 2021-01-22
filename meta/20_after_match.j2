@@ -1,0 +1,10 @@
+{%     endfor %}
+{%   endif %}
+{% endmacro %}
+{% macro host_block(host_list) %}
+{%   if host_list["Condition"] is defined %}
+{%     set host_list = [ host_list ]%}
+{%   endif %}
+{%   if host_list is iterable %}
+{%     for host in host_list %}
+Host {{ host["Condition"] }}

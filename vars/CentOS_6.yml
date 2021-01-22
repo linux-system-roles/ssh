@@ -1,7 +1,1 @@
-# SPDX-License-Identifier: MIT
----
-# Put internal variables here with CentOS 6 specific values.
-
-# Example:
-__ssh_packages: []
-__ssh_services: []
+RedHat_6.yml

@@ -1,10 +1,4 @@
-# SPDX-License-Identifier: MIT
 ---
-# Put the tasks for your role here.
-
-# An example of how to set distribution and version specific internal variables
-# (defined in vars/ directory)
-# see https://github.com/oasis-roles/meta_standards#platform-specific-variables
 - name: Set platform/version specific variables
   include_vars: "{{ __ssh_vars_file }}"
   loop:
@@ -20,23 +14,89 @@
     __ssh_vars_file: "{{ role_path }}/vars/{{ item }}"
   when: __ssh_vars_file is file
 
-# Examples of some tasks:
 - name: Ensure required packages are installed
   package:
-    name: "{{ __ssh_packages }}"
+    name: "{{ __ssh_packages + ssh_additional_packages }}"
     state: present
 
-- name: Ensure required services are enabled and started
-  service:
-    name: "{{ item }}"
-    state: started
-    enabled: yes
-  loop: "{{ __ssh_services }}"
+- name: Gather information about the user for user configuration
+  getent:
+    database: passwd
+    key: "{{ ssh_user }}"
+  when:
+    - ssh_user is not none
 
-- name: Generate /etc/{{ __ssh_foo_config }}
+- name: Make sure the ~/.ssh/ directory exists and has expected permissions
+  file:
+    path: "{{ getent_passwd[ssh_user][4] }}/.ssh/"
+    state: directory
+    mode: 0700
+    owner: "{{ ssh_user }}"
+    group: "{{ ssh_user }}"
+  when:
+    - ssh_user is not none
+    - getent_passwd is defined
+
+- name: Generate the configuration file
   template:
-    src: "{{ __ssh_foo_config }}.j2"
-    dest: /etc/{{ __ssh_foo_config }}
+    src: "ssh_config.j2"
+    dest: "{{ __ssh_config_file | trim }}"
+    owner: "{{ __ssh_config_owner | trim }}"
+    group: "{{ __ssh_config_group | trim }}"
+    mode: "{{ __ssh_config_mode | trim }}"
+    validate: >-
+      {% if __ssh_supports_validate %}
+        ssh -G -F %s example.com
+      {% else %}
+        true %s
+      {% endif %}
     backup: yes
-    mode: 0400
-  notify: ssh handler to restart services
+  vars:
+    __ssh_skip_defaults: >-
+      {% if ssh_skip_defaults != 'auto' %}
+        {{ ssh_skip_defaults }}
+      {% elif ssh_user is not none %}
+        true
+      {% else %}
+        {% if ssh_drop_in_name and __ssh_supports_drop_in %}
+          true
+        {% else %}
+          false
+        {% endif %}
+      {% endif %}
+    __ssh_config_file: >-
+      {% if ssh_config_file is not none %}
+        {{ ssh_config_file }}
+      {% elif ssh_user is not none and getent_passwd is defined %}
+        {{ getent_passwd[ssh_user][4] }}/.ssh/config
+      {% else %}
+        {% if ssh_drop_in_name and __ssh_supports_drop_in %}
+          {{ __ssh_drop_in_template | replace("{name}", ssh_drop_in_name) }}
+        {% else %}
+          /etc/ssh/ssh_config
+        {% endif %}
+      {% endif %}
+    __ssh_config_owner: >-
+      {% if ssh_config_owner is not none %}
+        {{ ssh_config_owner }}
+      {% elif ssh_user is not none %}
+        {{ ssh_user }}
+      {% else %}
+        root
+      {% endif %}
+    __ssh_config_group: >-
+      {% if ssh_config_group is not none %}
+        {{ ssh_config_group }}
+      {% elif ssh_user is not none and getent_passwd is defined %}
+        {{ ssh_user }}
+      {% else %}
+        root
+      {% endif %}
+    __ssh_config_mode: >-
+      {% if ssh_config_mode is not none %}
+        {{ ssh_config_mode }}
+      {% elif ssh_user is not none %}
+        600
+      {% else %}
+        644
+      {% endif %}

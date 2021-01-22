@@ -1,0 +1,19 @@
+---
+- name: Verify default packages as well as additional are installed
+  hosts: all
+  tasks:
+    - name: Run role
+      include_role:
+        name: linux-system-roles.ssh
+      vars:
+        ssh_additional_packages:
+          - openssh-keycat
+
+    - name: Gather the package facts
+      package_facts:
+
+    - name: Verify the packages were installed
+      assert:
+        that:
+          - "'openssh-keycat' in ansible_facts.packages"
+          - "'openssh' in ansible_facts.packages"

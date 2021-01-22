@@ -1,0 +1,70 @@
+---
+- name: Test we can write global config with default configuration
+  hosts: all
+  tasks:
+    - name: Run role
+      include_role:
+        name: linux-system-roles.ssh
+      vars:
+        ssh:
+          Compression: true
+          GSSAPIAuthentication: no
+          ControlMaster: auto
+          ControlPath: ~/.ssh/.cm%C
+          Match:
+            - Condition: "all"
+              GSSAPIAuthentication: yes
+          Host:
+            Condition: example
+            Hostname: example.com
+            User: somebody
+        ssh_ForwardX11: no
+        ssh_Match:
+          Condition: "exec true"
+          User: nobody
+        ssh_Host:
+          - Condition: local
+            Hostname: local.example.com
+
+    - name: Verify the configuration file was created with right content
+      vars:
+        ssh_config_file: >-
+          {{
+            "/etc/ssh/ssh_config.d/00-ansible.conf"
+            if ansible_facts['distribution'] == 'Fedora' or
+               (ansible_facts['distribution'] in ['RedHat','CentOS'] and
+                ansible_facts['distribution_version']|int >= 8)
+            else "/etc/ssh/ssh_config"
+          }}
+
+      block:
+        - name: Download the global configuration file
+          slurp:
+            src: "{{ ssh_config_file }}"
+          register: config
+
+        - name: Verify the options are in the file
+          assert:
+            that:
+              - "'Compression yes' in config.content | b64decode"
+              - "'GSSAPIAuthentication no' in config.content | b64decode"
+              - "'ControlMaster auto' in config.content | b64decode"
+              - "'ControlPath ~/.ssh/.cm%C' in config.content | b64decode"
+              - "'Match all' in config.content | b64decode"
+              - "'GSSAPIAuthentication yes' in config.content | b64decode"
+              - "'Host example' in config.content | b64decode"
+              - "'Hostname example.com' in config.content | b64decode"
+              - "'User somebody' in config.content | b64decode"
+              - "'ForwardX11 no' in config.content | b64decode"
+              - "'Match exec true' in config.content | b64decode"
+              - "'User nobody' in config.content | b64decode"
+              - "'Host local' in config.content | b64decode"
+              - "'Hostname local.example.com' in config.content | b64decode"
+
+        - name: Verify the defaults are not in the drop-in file
+          assert:
+            that:
+              - "'Include' not in config.content | b64decode"
+              - "'SendEnv' not in config.content | b64decode"
+          when:
+            - ssh_config_file != "/etc/ssh/ssh_config"

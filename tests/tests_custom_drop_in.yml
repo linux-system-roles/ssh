@@ -1,0 +1,35 @@
+---
+- name: Test we can write any other configuration file as a drop-in
+  hosts: all
+  tasks:
+    - name: Skip if the system does not support drop in directory
+      meta: end_host
+      when:
+        - ansible_facts['distribution'] != 'Fedora' and
+          not (ansible_facts['distribution'] in ['RedHat','CentOS'] and
+               ansible_facts['distribution_version'] | int >= 8)
+
+    - name: Run role
+      include_role:
+        name: linux-system-roles.ssh
+      vars:
+        ssh:
+          Compression: true
+          GSSAPIAuthentication: no
+        __ssh_drop_in_template: /tmp/ssh_config.d_{name}.conf
+
+    - name: Verify the configuration file was created in the right place
+      block:
+        - name: Download the custom configuration file drop-in
+          slurp:
+            src: /tmp/ssh_config.d_00-ansible.conf
+          register: config
+
+        - name: Verify the options are in the file
+          assert:
+            that:
+              - "'Compression yes' in config.content | b64decode"
+              - "'GSSAPIAuthentication no' in config.content | b64decode"
+              # common defaults should be skipped (ssh_skip_defaults=auto)
+              - "'Include' not in config.content | b64decode"
+              - "'SendEnv' not in config.content | b64decode"

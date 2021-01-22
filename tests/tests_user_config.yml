@@ -1,0 +1,66 @@
+---
+- name: Test a creation of configuration file in the user directory
+  hosts: all
+  vars:
+    username: tester123
+  tasks:
+    - name: Create a test group
+      user:
+        name: "{{ username }}"
+
+    - name: Create a test user
+      user:
+        name: "{{ username }}"
+        group: "{{ username }}"
+
+    - name: Run role
+      include_role:
+        name: linux-system-roles.ssh
+      vars:
+        ssh_user: "{{ username }}"
+        ssh:
+          GSSAPIAuthentication: no
+          Host:
+            Condition: example
+            Hostname: example.com
+            User: somebody
+
+    - name: Gather information about the user
+      getent:
+        database: passwd
+        key: "{{ username }}"
+
+    - name: Verify the configuration file was created with right content
+      vars:
+        ssh_test_config_file:
+          "{{ getent_passwd[username][4] }}/.ssh/config"
+      block:
+        - name: Download the created configuration file
+          slurp:
+            src: "{{ ssh_test_config_file }}"
+          register: config
+
+        - name: Stat the configuration file too
+          stat:
+            path: "{{ ssh_test_config_file }}"
+          register:
+            config_mode
+
+        - name: Verify the options are in the file
+          assert:
+            that:
+              - "'GSSAPIAuthentication no' in config.content | b64decode"
+              - "'Host example' in config.content | b64decode"
+              - "'Hostname example.com' in config.content | b64decode"
+              - "'User somebody' in config.content | b64decode"
+              # common defaults should be skipped (ssh_skip_defaults=auto)
+              - "'Include' not in config.content | b64decode"
+              - "'SendEnv' not in config.content | b64decode"
+
+        - name: Verify the file has default sensible permissions
+          assert:
+            that:
+              - config_mode.stat.exists
+              - "config_mode.stat.pw_name == '{{ username }}'"
+              - "config_mode.stat.gr_name == '{{ username }}'"
+              - config_mode.stat.mode == '0600'

@@ -1,0 +1,52 @@
+---
+- name: Test we can write global config with given permissions
+  hosts: all
+  tasks:
+    - name: Run role
+      include_role:
+        name: linux-system-roles.ssh
+      vars:
+        ssh:
+          Compression: true
+          GSSAPIAuthentication: no
+        # bad example
+        ssh_config_owner: daemon
+        ssh_config_group: daemon
+        ssh_config_mode: 600
+
+    - name: Verify the configuration file was created with right content
+      vars:
+        ssh_test_config_file: >-
+          {{
+            "/etc/ssh/ssh_config.d/00-ansible.conf"
+            if ansible_facts['distribution'] == 'Fedora' or
+               (ansible_facts['distribution'] in ['RedHat','CentOS'] and
+                ansible_facts['distribution_version']|int >= 8)
+            else "/etc/ssh/ssh_config"
+          }}
+
+      block:
+        - name: Download the global configuration file
+          slurp:
+            src: "{{ ssh_test_config_file }}"
+          register: config
+
+        - name: Stat the configuration file too
+          stat:
+            path: "{{ ssh_test_config_file }}"
+          register:
+            config_mode
+
+        - name: Verify the options are in the file
+          assert:
+            that:
+              - "'Compression yes' in config.content | b64decode"
+              - "'GSSAPIAuthentication no' in config.content | b64decode"
+
+        - name: Verify the file has expected permissions
+          assert:
+            that:
+              - config_mode.stat.exists
+              - config_mode.stat.gr_name == 'daemon'
+              - config_mode.stat.pw_name == 'daemon'
+              - config_mode.stat.mode == '0600'

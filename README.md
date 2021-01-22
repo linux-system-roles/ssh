@@ -1,52 +1,105 @@
 # ssh
 ![CI Testing](https://github.com/linux-system-roles/ssh/workflows/tox/badge.svg)
 
-An Ansible role for managing ssh clients.
+An Ansible role for managing ssh clients configuration.
 
 ## Requirements
 
-Any pre-requisites that may not be covered by Ansible itself or the role should
-be mentioned here. For instance, if the role uses the EC2 module, it may be a
-good idea to mention in this section that the `boto` package is required.
+This role should work on any system that provides openssh client and is
+supported by ansible. The role was tested on:
+
+ * RHEL/CentOS 6, 7, 8
+ * Fedora 32, 33
+ * Debian
+ * Ubuntu
 
 ## Role Variables
 
-A description of all input variables (i.e. variables that are defined in
-`defaults/main.yml`) for the role should go here as these form an API of the
-role.
+By default, the role should not modify the system configuration and generate
+global `ssh_config` that matches OS default (the generated configuration does
+not keep comments and order of the options).
 
-Variables that are not intended as input, like variables defined in
-`vars/main.yml`, variables that are read from other roles and/or the global
-scope (ie. hostvars, group vars, etc.) can be also mentioned here but keep in
-mind that as these are probably not part of the role API they may change during
-the lifetime.
+ * `ssh_user`:
 
-Example of setting the variables:
+By default (*null*) the role will modify the global configuration for all
+users. Other values will be interpretted as a username and the role will
+modify per-user configuration stored under `~/.ssh/config` of the given user.
+The user needs to exists before invoking this role otherwise it will fail.
 
-```yaml
-ssh_foo: "oof"
-ssh_bar: "baz"
-```
+ * `ssh_skip_defaults`:
 
-### Variables Exported by the Role
+By default (`auto`), the role writes the system-wide configuration file
+`/etc/ssh/ssh_config` and keeps OS defaults defined there (*true*). This is
+automatically disabled, when a drop-in configuration file is created
+(`ssh_drop_in_name!=False`) or when per-user configuration file is created
+(`ssh_user!=null`).
 
-This section is optional.  Some roles may export variables for playbooks to
-use later.  These are analogous to "return values" in Ansible modules.  For
-example, if a role performs some action that will require a system reboot, but
-the user wants to defer the reboot, the role might set a variable like
-`ssh_reboot_needed: true` that the playbook can use to reboot at a more
-convenient time.
+ * `ssh_drop_in_name`:
 
-Example:
+This defines the name for the drop-in configuration file to be placed in
+system-wide drop-in directory. The name is used in the template
+defined by `__ssh_drop_in_template` (by default
+`/etc/ssh/ssh_config.d/{name}.conf`) to reference the configuration file
+to be modified. If the system does not support drop-in directory, setting
+this option will make the play fail. Default is `false` if the system does
+not support drop in directory and `00-ansible` otherwise.
 
-`ssh_reboot_needed` - default `false` - if `true`, this means
-a reboot is needed to apply the changes made by the role
+The suggested format is `NN-name`, where `NN` is two-digit number used for
+sorting the and `name` is any descriptive name for the content or the owner
+of the file.
+
+ * `ssh`:
+
+A dict containing configuration options and respective values. See example
+below.
+
+ * `ssh_...`:
+
+Simple variables consisting of the option name prefixed with `ssh_` can be
+used rather than a dict above. The simple variable overrides values in dict
+above.
+
+ * `ssh_additional_packages`:
+
+This role automatically installs packages needed for most common use cases
+on given platform. If some additional packages need to be installed (for
+example `openssh-keysign` for hostbased authentication), they can be specified
+in this variable.
+
+### Secondary role variables:
+
+These variables are used by the role internals and can be used to override
+the defaults that correspond to each supported platform.
+
+ * `__ssh_packages`:
+
+Minimal list of packages to install on a given platform for openssh clients
+to function. Do not override this variable if you need to install additional
+packages. Use `ssh_additional_packages` instead.
+
+ * `ssh_config_file`:
+
+The configuration file that will be written by this role. The default is
+defined by template `__ssh_drop_in_template` if system has drop-in directory
+or `/etc/ssh/ssh_config` otherwise. If `ssh_user!=null`, the
+default is `~/.ssh/config`.
+
+ * `__drop_in_template`:
+
+The template for a filename used for global drop-in configuration snippets.
+The default value is `/etc/ssh/ssh_config.d/{name}.conf`.
+
+ * `ssh_config_owner`, `ssh_config_group`, `ssh_config_mode`:
+
+The owner, group and mode of the created configuration file. The files are
+owned by `root:root` with mode `0644` by default, unless
+`ssh_user!=null`. In that case, the mode is `0600` and owner and
+group are derived from username given in `ssh_user` variable.
+
 
 ## Dependencies
 
-A list of other roles hosted on Galaxy should go here, plus any details in
-regards to parameters that may need to be set for other roles, or variables
-that are used from other roles.
+none
 
 ## Example Playbook
 
@@ -55,22 +108,43 @@ passed in as parameters) is always nice for users too:
 
 ```yaml
 - hosts: all
-  vars:
-    ssh_foo: "foo foo!"
-    ssh_bar: "progress bar"
-
-  roles:
-    - linux-system-roles.ssh
+  tasks:
+  - name: "Configure ssh clients"
+    include_role:
+      name: linux-system-roles.ssh
+    vars:
+      ssh_user: root
+      ssh:
+        Compression: true
+        GSSAPIAuthentication: no
+        ControlMaster: auto
+        ControlPath: ~/.ssh/.cm%C
+        Match:
+          - Condition: "final all"
+            GSSAPIAuthentication: yes
+        Host:
+          - Condition: example
+            Hostname: example.com
+            User: somebody
+      ssh_ForwardX11: no
 ```
 
 More examples can be provided in the [`examples/`](examples) directory. These
 can be useful especially for documentation.
 
+## Template Generation
+
+The [`ssh_config.j2`](templates/ssh_config.j2) template is programatically
+generated by the scripts in meta. New options should be added to the
+`options_body`.
+
+To regenerate the template, from within the `meta/` directory run:
+`./make_option_list >../templates/ssh_config.j2`
+
 ## License
 
-Whenever possible, please prefer MIT.
+LGPLv3, see the file LICENSE for more information.
 
 ## Author Information
 
-An optional section for the role authors to include contact information, or a
-website (HTML is not allowed).
+Jakub Jelen, 2021

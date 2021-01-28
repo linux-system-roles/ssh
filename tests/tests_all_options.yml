@@ -1,0 +1,62 @@
+---
+- name: Test we can handle all configuration options documented in manual page
+  hosts: all
+  vars:
+    ssh_c: {}
+  tasks:
+    - name: Ubuntu and RHEL6 containers are minified, missing manual pages
+      meta: end_host
+      when:
+        - ansible_facts['distribution'] == 'Ubuntu'
+        - ansible_facts['distribution'] in ['CentOS', 'RedHat'] and
+          ansible_facts['distribution_version'] | int < 7
+
+    - name: Make sure manual pages and bash are installed
+      package:
+        name:
+          - man
+          - bash
+        state: present
+
+    - name: Get list of options from manual page
+      shell: >-
+        set -o pipefail && man ssh_config \
+          | grep -o '^     [A-Z][A-Za-z0-9]*\(.\|  \)' \
+          | grep -v "[A-Za-z0-9] $" | grep -v "[^A-Za-z0-9 ]$" \
+          | awk '{ print $1 }' \
+          | grep -v '^$' | grep -v "^Host$" | grep -v "^Match$"
+      args:
+        executable: /bin/bash
+
+      register: ssh_options
+      changed_when: false
+
+    - debug:
+        var: ssh_options.stdout_lines
+
+    - name: Construct the configuration list
+      set_fact:
+        ssh_c: "{{ ssh_c | combine({item: 'yes'}) }}"
+      loop:
+        "{{ ssh_options.stdout_lines }}"
+
+    - name: Run role
+      include_role:
+        name: linux-system-roles.ssh
+      vars:
+        __ssh_supports_validate: false
+        ssh_config_file: /tmp/ssh_config
+        ssh:
+          "{{ ssh_c }}"
+
+    - name: Download the configuration file
+      slurp:
+        src: /tmp/ssh_config
+      register: config
+
+    - name: Verify the options are in the file
+      assert:
+        that:
+          - "'{{ item }} yes' in config.content | b64decode "
+      loop:
+        "{{ ssh_options.stdout_lines }}"

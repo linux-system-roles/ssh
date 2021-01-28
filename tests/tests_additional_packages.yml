@@ -3,17 +3,21 @@
   hosts: all
   vars:
     additional_package: >-
-      {{
-        "openssh-keycat" if ansible_facts['os_family'] == 'RedHat'
-        else "openssh-tests"
-      }}
+      {% if ansible_facts['distribution'] in [ 'RedHat', 'CentOS' ] and
+            ansible_facts['distribution_version'] | int < 9 %}
+        openssh-ldap
+      {% elif ansible_facts['os_family'] == 'RedHat' %}
+        openssh-keycat
+      {% else %}
+        openssh-tests
+      {% endif %}
   tasks:
     - name: Run role
       include_role:
         name: linux-system-roles.ssh
       vars:
         ssh_additional_packages:
-          - "{{ additional_package }}"
+          - "{{ additional_package | trim }}"
 
     - name: Gather the package facts
       package_facts:
@@ -21,4 +25,4 @@
     - name: Verify the packages were installed
       assert:
         that:
-          - "'{{ additional_package }}' in ansible_facts.packages"
+          - "'{{ additional_package | trim }}' in ansible_facts.packages"

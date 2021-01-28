@@ -1,12 +1,12 @@
 {% if ssh['Match'] is defined %}
 {{ match_block(ssh['Match']) -}}
 {% endif %}
-{% if ssh_match is defined %}
-{{ match_block(ssh_match) -}}
+{% if ssh_Match is defined %}
+{{ match_block(ssh_Match) -}}
 {% endif %}
 {% if ssh['Host'] is defined %}
 {{ host_block(ssh['Host']) -}}
 {% endif %}
-{% if ssh_host is defined %}
-{{ host_block(ssh_host) -}}
+{% if ssh_Host is defined %}
+{{ host_block(ssh_Host) -}}
 {% endif %}

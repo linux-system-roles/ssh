@@ -7,9 +7,9 @@
     - name: Ubuntu and RHEL6 containers are minified, missing manual pages
       meta: end_host
       when:
-        - ansible_facts['distribution'] == 'Ubuntu'
-        - ansible_facts['distribution'] in ['CentOS', 'RedHat'] and
-          ansible_facts['distribution_version'] | int < 7
+        - ansible_facts['distribution'] == 'Ubuntu' or
+          (ansible_facts['distribution'] in ['CentOS', 'RedHat'] and
+           ansible_facts['distribution_version'] | int < 7)
 
     - name: Make sure manual pages and bash are installed
       package:

@@ -58,7 +58,7 @@
       {% elif ssh_user is not none %}
         true
       {% else %}
-        {% if ssh_drop_in_name and __ssh_supports_drop_in %}
+        {% if ssh_drop_in_name is not none and __ssh_supports_drop_in %}
           true
         {% else %}
           false
@@ -70,7 +70,7 @@
       {% elif ssh_user is not none and getent_passwd is defined %}
         {{ getent_passwd[ssh_user][4] }}/.ssh/config
       {% else %}
-        {% if ssh_drop_in_name and __ssh_supports_drop_in %}
+        {% if ssh_drop_in_name is not none and __ssh_supports_drop_in %}
           {{ __ssh_drop_in_template | replace("{name}", ssh_drop_in_name) }}
         {% else %}
           /etc/ssh/ssh_config

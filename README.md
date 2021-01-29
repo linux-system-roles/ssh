@@ -31,7 +31,7 @@ The user needs to exists before invoking this role otherwise it will fail.
 By default (`auto`), the role writes the system-wide configuration file
 `/etc/ssh/ssh_config` and keeps OS defaults defined there (*true*). This is
 automatically disabled, when a drop-in configuration file is created
-(`ssh_drop_in_name!=False`) or when per-user configuration file is created
+(`ssh_drop_in_name!=null`) or when per-user configuration file is created
 (`ssh_user!=null`).
 
  * `ssh_drop_in_name`:
@@ -41,7 +41,7 @@ system-wide drop-in directory. The name is used in the template
 defined by `__ssh_drop_in_template` (by default
 `/etc/ssh/ssh_config.d/{name}.conf`) to reference the configuration file
 to be modified. If the system does not support drop-in directory, setting
-this option will make the play fail. Default is `false` if the system does
+this option will make the play fail. Default is `null` if the system does
 not support drop in directory and `00-ansible` otherwise.
 
 The suggested format is `NN-name`, where `NN` is two-digit number used for

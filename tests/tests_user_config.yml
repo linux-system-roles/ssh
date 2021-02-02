@@ -4,8 +4,8 @@
   vars:
     username: tester123
   tasks:
-    - name: Create a test group
-      user:
+    - name: Create a test group (with the same name as user)
+      group:
         name: "{{ username }}"
 
     - name: Create a test user

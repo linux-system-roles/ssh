@@ -47,7 +47,31 @@
             src: "{{ ssh_test_config_file }}"
           register: config
 
-        - name: Stat the configuration file too
+        - name: Stat the .ssh dir
+          become: true
+          become_user: "{{ username }}"
+          become_method: su
+          stat:
+            path: "/home/{{ username }}/.ssh"
+          register:
+            ssh_dir_mode
+
+        - name: Verify the ~/.ssh has sensible permissions
+          assert:
+            that:
+              - ssh_dir_mode.stat.exists
+              - "ssh_dir_mode.stat.pw_name == '{{ username }}'"
+              - "ssh_dir_mode.stat.gr_name == '{{ username }}'"
+              - ssh_dir_mode.stat.mode == '0700'
+
+        - name: Make sure the file is readable by user
+          become: true
+          become_user: "{{ username }}"
+          become_method: su
+          stat:
+            path: "/home/{{ username }}/.ssh/config"
+
+        - name: Stat the configuration file
           stat:
             path: "{{ ssh_test_config_file }}"
           register:
@@ -64,13 +88,26 @@
               - "'Include' not in config.content | b64decode"
               - "'SendEnv' not in config.content | b64decode"
 
-        - name: Verify the file has default sensible permissions
+        - name: Verify the file has sensible permissions
           assert:
             that:
               - config_mode.stat.exists
               - "config_mode.stat.pw_name == '{{ username }}'"
               - "config_mode.stat.gr_name == '{{ username }}'"
               - config_mode.stat.mode == '0600'
+
+        - name: Test the effective configuration using ssh
+          become: true
+          become_user: "{{ username }}"
+          become_method: su
+          shell: id; ssh -vvv -G example
+          register: effective
+
+        - name: Make sure the effective configuration is expected
+          assert:
+            that:
+              - "'hostname example.com' in effective.stdout"
+              - "'user somebody' in effective.stdout"
 
         - name: Download the global configuration files too
           slurp:

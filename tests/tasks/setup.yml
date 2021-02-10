@@ -1,0 +1,11 @@
+---
+- name: Make sure openssh is installed before creating backup
+  vars:
+    - __ssh_test_packages: >-
+        {{
+          "openssh-clients" if ansible_facts['os_family'] == 'RedHat'
+          else "openssh-client"
+        }}
+  package:
+    name: "{{ __ssh_test_packages }}"
+    state: present

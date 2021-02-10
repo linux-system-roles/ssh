@@ -1,7 +1,15 @@
 ---
 - name: Test we can write global config with given permissions
   hosts: all
+  vars:
+    __ssh_test_backup_files:
+      - /etc/ssh/ssh_config.d/00-ansible.conf
+      - /etc/ssh/ssh_config
+
   tasks:
+    - name: Backup configuration files
+      include_tasks: tasks/backup.yml
+
     - name: Run role
       include_role:
         name: linux-system-roles.ssh
@@ -50,3 +58,6 @@
               - config_mode.stat.gr_name == 'daemon'
               - config_mode.stat.pw_name == 'daemon'
               - config_mode.stat.mode == '0600'
+
+    - name: Restore configuration files
+      include_tasks: tasks/restore.yml

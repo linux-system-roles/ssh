@@ -1,7 +1,15 @@
 ---
 - name: Verify default packages as well as additional are installed
   hosts: all
+  vars:
+    __ssh_test_backup_files:
+      - /etc/ssh/ssh_config.d/00-ansible.conf
+      - /etc/ssh/ssh_config
+
   tasks:
+    - name: Backup configuration files
+      include_tasks: tasks/backup.yml
+
     - name: Run role
       include_role:
         name: linux-system-roles.ssh
@@ -74,3 +82,6 @@
               - "'hostname remote.example.com' in test3.stdout"
               - "'hostname remote.example.com' not in test1.stdout"
               - "'hostname remote.example.com' not in test2.stdout"
+
+    - name: Restore configuration files
+      include_tasks: tasks/restore.yml

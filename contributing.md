@@ -2,6 +2,42 @@
 
 Developer documentation for ssh system role.
 
+
+## Internal role variables
+
+These variables are used by the role internals and can be used to override
+the defaults that correspond to each supported platform.
+
+ * `__ssh_packages`:
+
+Minimal list of packages to install on a given platform for openssh clients
+to function. Do not override this variable if you need to install additional
+packages. Use `ssh_additional_packages` instead.
+
+ * `__ssh_drop_in_template`:
+
+The template for a filename used for global drop-in configuration snippets.
+The default value is `/etc/ssh/ssh_config.d/{name}.conf`.
+
+ * `__ssh_defaults`:
+
+This variable contains a dict with default configuration options available
+in the main system-wide configuration file, usually `/etc/ssh/ssh_config`.
+
+ * `__ssh_supports_drop_in`:
+
+The boolean flag describing if the system/openssh on the system supports
+drop-in directory and this role should use it instead of overriding the
+system-wide configuration file.
+
+ * `__ssh_supports_validate`:
+
+The boolean flag which controls whether the system/openssh supports test
+mode and the generated configuration file can be checked for syntax before
+writing to the filesystem. Some older versions (for example openssh 5.3p1)
+do not support this and need to skip this check.
+
+
 ## Template Generation
 
 The [`ssh_config.j2`](templates/ssh_config.j2) template is programatically

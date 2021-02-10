@@ -1,0 +1,49 @@
+---
+- name: Test options precedence when mixing ssh dict and ssh_* variables
+  hosts: all
+  vars:
+    __ssh_test_backup_files:
+      - /etc/ssh/ssh_config.d/00-ansible.conf
+      - /etc/ssh/ssh_config
+
+  tasks:
+    - name: Backup configuration files
+      include_tasks: tasks/backup.yml
+
+    - name: Run role
+      include_role:
+        name: linux-system-roles.ssh
+      vars:
+        ssh:
+          StrictHostKeyChecking: false
+          Port: 1111
+        ssh_StrictHostKeyChecking: true
+        ssh_Port: 222
+
+    - name: Verify the configuration file was created with right content
+      vars:
+        ssh_config_file: >-
+          {{
+            "/etc/ssh/ssh_config.d/00-ansible.conf"
+            if ansible_facts['distribution'] == 'Fedora' or
+               (ansible_facts['distribution'] in ['RedHat','CentOS'] and
+                ansible_facts['distribution_version']|int >= 8)
+            else "/etc/ssh/ssh_config"
+          }}
+
+      block:
+        - name: Download the global configuration file
+          slurp:
+            src: "{{ ssh_config_file }}"
+          register: config
+
+        - name: Verify the options are in the file
+          assert:
+            that:
+              - "'StrictHostKeyChecking yes' in config.content | b64decode"
+              - "'Port 222' in config.content | b64decode"
+              - "'StrictHostKeyChecking no' not in config.content | b64decode"
+              - "'Port 1111' not in config.content | b64decode"
+
+    - name: Restore configuration files
+      include_tasks: tasks/restore.yml

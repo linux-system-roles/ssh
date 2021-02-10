@@ -37,12 +37,11 @@ automatically disabled, when a drop-in configuration file is created
  * `ssh_drop_in_name`:
 
 This defines the name for the drop-in configuration file to be placed in
-system-wide drop-in directory. The name is used in the template
-defined by `__ssh_drop_in_template` (by default
-`/etc/ssh/ssh_config.d/{name}.conf`) to reference the configuration file
-to be modified. If the system does not support drop-in directory, setting
-this option will make the play fail. Default is `null` if the system does
-not support drop in directory and `00-ansible` otherwise.
+system-wide drop-in directory. The name is used in the template defined by
+(by default `/etc/ssh/ssh_config.d/{name}.conf`) to reference the
+configuration file to be modified. If the system does not support drop-in
+directory, setting this option will make the play fail. Default is `null`
+if the system does not support drop in directory and `00-ansible` otherwise.
 
 The suggested format is `NN-name`, where `NN` is two-digit number used for
 sorting the and `name` is any descriptive name for the content or the owner
@@ -66,28 +65,12 @@ on given platform. If some additional packages need to be installed (for
 example `openssh-keysign` for hostbased authentication), they can be specified
 in this variable.
 
-### Secondary role variables:
-
-These variables are used by the role internals and can be used to override
-the defaults that correspond to each supported platform.
-
- * `__ssh_packages`:
-
-Minimal list of packages to install on a given platform for openssh clients
-to function. Do not override this variable if you need to install additional
-packages. Use `ssh_additional_packages` instead.
-
  * `ssh_config_file`:
 
 The configuration file that will be written by this role. The default is
-defined by template `__ssh_drop_in_template` if system has drop-in directory
-or `/etc/ssh/ssh_config` otherwise. If `ssh_user!=null`, the
+defined by template `/etc/ssh/ssh_config.d/{name}.conf` if system has drop-in
+directory or `/etc/ssh/ssh_config` otherwise. If `ssh_user!=null`, the
 default is `~/.ssh/config`.
-
- * `__drop_in_template`:
-
-The template for a filename used for global drop-in configuration snippets.
-The default value is `/etc/ssh/ssh_config.d/{name}.conf`.
 
  * `ssh_config_owner`, `ssh_config_group`, `ssh_config_mode`:
 
@@ -95,6 +78,7 @@ The owner, group and mode of the created configuration file. The files are
 owned by `root:root` with mode `0644` by default, unless
 `ssh_user!=null`. In that case, the mode is `0600` and owner and
 group are derived from username given in `ssh_user` variable.
+
 
 
 ## Dependencies

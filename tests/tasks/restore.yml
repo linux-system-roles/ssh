@@ -1,0 +1,22 @@
+---
+- name: Restore backed up files and remove what was not present
+  shell: >
+    if test -f {{ __ssh_test_backup.path }}/{{ item }}; then
+      cp {{ __ssh_test_backup.path }}/{{ item }} $(dirname {{ item }})
+    elif test -f {{ item }}; then
+      rm {{ item }}
+    fi
+  changed_when: False
+  loop: "{{ __ssh_test_backup_files | d([]) }}"
+  when:
+    - __ssh_test_backup is defined
+    - __ssh_test_backup.path is defined
+
+- name: Remove temporary directory for backup files
+  file:
+    path: "{{ __ssh_test_backup.path }}"
+    state: absent
+  changed_when: False
+  when:
+    - __ssh_test_backup is defined
+    - __ssh_test_backup.path is defined

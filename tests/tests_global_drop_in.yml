@@ -1,6 +1,11 @@
 ---
 - name: Test forced creation of the configuration snippet in drop in directory
   hosts: all
+  vars:
+    __ssh_test_backup_files:
+      - /etc/ssh/ssh_config.d/99-last.conf
+      - /etc/ssh/ssh_config
+
   tasks:
     - name: Skip if the system does not support drop in directory
       meta: end_host
@@ -8,6 +13,9 @@
         - ansible_facts['distribution'] != 'Fedora' and
           not (ansible_facts['distribution'] in ['RedHat','CentOS'] and
                ansible_facts['distribution_version'] | int >= 8)
+
+    - name: Backup configuration files
+      include_tasks: tasks/backup.yml
 
     - name: Run role
       include_role:
@@ -54,3 +62,6 @@
               - config_mode.stat.gr_name == 'root'
               - config_mode.stat.pw_name == 'root'
               - config_mode.stat.mode == '0644'
+
+    - name: Restore configuration files
+      include_tasks: tasks/restore.yml

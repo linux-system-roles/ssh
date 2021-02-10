@@ -2,8 +2,14 @@
 - name: Test a creation of configuration file in the user directory
   hosts: all
   vars:
+    __ssh_test_backup_files:
+      - /etc/ssh/ssh_config.d/00-ansible.conf
+      - /etc/ssh/ssh_config
     username: tester123
   tasks:
+    - name: Backup configuration files
+      include_tasks: tasks/backup.yml
+
     - name: Create a test group (with the same name as user)
       group:
         name: "{{ username }}"
@@ -64,3 +70,6 @@
               - "config_mode.stat.pw_name == '{{ username }}'"
               - "config_mode.stat.gr_name == '{{ username }}'"
               - config_mode.stat.mode == '0600'
+
+    - name: Restore configuration files
+      include_tasks: tasks/restore.yml

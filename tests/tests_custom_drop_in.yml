@@ -1,6 +1,10 @@
 ---
 - name: Test we can write any other configuration file as a drop-in
   hosts: all
+  vars:
+    __ssh_test_backup_files:
+      - /tmp/ssh_config.d_00-ansible.conf
+
   tasks:
     - name: Skip if the system does not support drop in directory
       meta: end_host
@@ -8,6 +12,9 @@
         - ansible_facts['distribution'] != 'Fedora' and
           not (ansible_facts['distribution'] in ['RedHat','CentOS'] and
                ansible_facts['distribution_version'] | int >= 8)
+
+    - name: Backup configuration files
+      include_tasks: tasks/backup.yml
 
     - name: Run role
       include_role:
@@ -33,3 +40,6 @@
               # common defaults should be skipped (ssh_skip_defaults=auto)
               - "'Include' not in config.content | b64decode"
               - "'SendEnv' not in config.content | b64decode"
+
+    - name: Restore configuration files
+      include_tasks: tasks/restore.yml

@@ -1,7 +1,15 @@
 ---
 - name: Test we can write global config with default configuration
   hosts: all
+  vars:
+    __ssh_test_backup_files:
+      - /etc/ssh/ssh_config.d/00-ansible.conf
+      - /etc/ssh/ssh_config
+
   tasks:
+    - name: Backup configuration files
+      include_tasks: tasks/backup.yml
+
     - name: Run role
       include_role:
         name: linux-system-roles.ssh
@@ -68,3 +76,6 @@
               - "'SendEnv' not in config.content | b64decode"
           when:
             - ssh_config_file != "/etc/ssh/ssh_config"
+
+    - name: Restore configuration files
+      include_tasks: tasks/restore.yml

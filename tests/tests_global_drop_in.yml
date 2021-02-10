@@ -47,13 +47,25 @@
         - name: Verify the options are in the file
           assert:
             that:
-              - "'GSSAPIAuthentication no' in config.content | b64decode"
+              - "'\nGSSAPIAuthentication no' in config.content | b64decode"
               - "'Host example' in config.content | b64decode"
               - "'Hostname example.com' in config.content | b64decode"
               - "'User somebody' in config.content | b64decode"
               # common defaults should be skipped (ssh_skip_defaults=auto)
               - "'Include' not in config.content | b64decode"
               - "'SendEnv' not in config.content | b64decode"
+
+        - name: Download the main configuration file too
+          slurp:
+            src: "/etc/ssh/ssh_config"
+          register: global_config
+
+        - name: Verify the options are NOT in the global configuration file
+          assert:
+            that:
+              - "'\nGSSAPIAuthentication no' not in global_config.content | b64decode"
+              - "'Host example' not in global_config.content | b64decode"
+              - "'User somebody' not in global_config.content | b64decode"
 
         - name: Verify the file has default sensible permissions
           assert:

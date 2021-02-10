@@ -1,0 +1,76 @@
+---
+- name: Verify default packages as well as additional are installed
+  hosts: all
+  tasks:
+    - name: Run role
+      include_role:
+        name: linux-system-roles.ssh
+      vars:
+        ssh:
+          Match:
+            - Condition: user testuser
+              Compression: true
+            - Condition: host example
+              Hostname: example.com
+          Host:
+            - Condition: local
+              User: localuser
+            - Condition: remote
+              Hostname: remote.example.com
+
+    - name: Verify the configuration file was created in the right place
+      vars:
+        ssh_config_file: >-
+          {{
+            "/etc/ssh/ssh_config.d/00-ansible.conf"
+            if ansible_facts['distribution'] == 'Fedora' or
+               (ansible_facts['distribution'] in ['RedHat','CentOS'] and
+                ansible_facts['distribution_version']|int >= 8)
+            else "/etc/ssh/ssh_config"
+          }}
+
+      block:
+        - name: Download the custom configuration file
+          slurp:
+            src: "{{ ssh_config_file }}"
+          register: config
+
+        - name: Verify the options are in the file
+          assert:
+            that:
+              - "'Match user testuser' in config.content | b64decode"
+              - "'Compression yes' in config.content | b64decode"
+              - "'Match host example' in config.content | b64decode"
+              - "'Hostname example.com' in config.content | b64decode"
+              - "'Host local' in config.content | b64decode"
+              - "'User localuser' in config.content | b64decode"
+              - "'Host remote' in config.content | b64decode"
+              - "'Hostname remote.example.com' in config.content | b64decode"
+
+        - name: Run first ssh in test mode to evaluate the configuration
+          command: ssh -G testuser@example
+          register: test1
+
+        - name: Run second ssh in test mode to evaluate the configuration
+          command: ssh -G local
+          register: test2
+
+        - name: Run third ssh in test mode to evaluate the configuration
+          command: ssh -G remote
+          register: test3
+
+        - name: Verify the options are correctly evaluated
+          assert:
+            that:
+              - "'compression yes' in test1.stdout"
+              - "'compression yes' not in test2.stdout"
+              - "'compression yes' not in test3.stdout"
+              - "'hostname example.com' in test1.stdout"
+              - "'hostname example.com' not in test2.stdout"
+              - "'hostname example.com' not in test3.stdout"
+              - "'user localuser' in test2.stdout"
+              - "'user localuser' not in test3.stdout"
+              - "'user localuser' not in test1.stdout"
+              - "'hostname remote.example.com' in test3.stdout"
+              - "'hostname remote.example.com' not in test1.stdout"
+              - "'hostname remote.example.com' not in test2.stdout"

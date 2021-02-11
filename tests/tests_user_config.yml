@@ -100,7 +100,7 @@
           become: true
           become_user: "{{ username }}"
           become_method: su
-          shell: ssh -vvv -G example
+          command: ssh -vvv -G example
           register: effective
           when:
             - ansible_facts['distribution'] not in ['CentOS', 'RedHat'] or

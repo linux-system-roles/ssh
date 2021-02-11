@@ -6,7 +6,7 @@
     elif test -f {{ item }}; then
       rm {{ item }}
     fi
-  changed_when: False
+  changed_when: false
   loop: "{{ __ssh_test_backup_files | d([]) }}"
   when:
     - __ssh_test_backup is defined
@@ -16,7 +16,7 @@
   file:
     path: "{{ __ssh_test_backup.path }}"
     state: absent
-  changed_when: False
+  changed_when: false
   when:
     - __ssh_test_backup is defined
     - __ssh_test_backup.path is defined

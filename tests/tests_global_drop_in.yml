@@ -63,9 +63,11 @@
         - name: Verify the options are NOT in the global configuration file
           assert:
             that:
-              - "'\nGSSAPIAuthentication no' not in global_config.content | b64decode"
-              - "'Host example' not in global_config.content | b64decode"
-              - "'User somebody' not in global_config.content | b64decode"
+              - "'\nGSSAPIAuthentication no' not in content"
+              - "'Host example' not in content"
+              - "'User somebody' not in content"
+          vars:
+            content: "{{ global_config.content | b64decode }}"
 
         - name: Verify the file has default sensible permissions
           assert:

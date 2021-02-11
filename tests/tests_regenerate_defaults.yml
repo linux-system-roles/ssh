@@ -25,13 +25,16 @@
       vars:
         ssh_skip_defaults: false
         ssh_config_file: /tmp/ssh_config_with_defaults
+        ssh:
+          LocalForward: 2222 localhost:22
 
     - name: Download the new configuration file
       slurp:
-        src: /etc/ssh/ssh_config
+        src: /tmp/ssh_config_with_defaults
       register: config
 
     - name: Check if the selected options are in
       assert:
         that:
           - "'{{ __ssh_test_option|trim }}' in config.content | b64decode"
+          - "'LocalForward 2222 localhost:22' in config.content | b64decode"

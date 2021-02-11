@@ -100,14 +100,20 @@
           become: true
           become_user: "{{ username }}"
           become_method: su
-          shell: id; ssh -vvv -G example
+          shell: ssh -vvv -G example
           register: effective
+          when:
+            - ansible_facts['distribution'] not in ['CentOS', 'RedHat'] or
+              ansible_facts['distribution_version'] | int > 6
 
         - name: Make sure the effective configuration is expected
           assert:
             that:
               - "'hostname example.com' in effective.stdout"
               - "'user somebody' in effective.stdout"
+          when:
+            - ansible_facts['distribution'] not in ['CentOS', 'RedHat'] or
+              ansible_facts['distribution_version'] | int > 6
 
         - name: Download the global configuration files too
           slurp:

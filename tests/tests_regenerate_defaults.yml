@@ -1,0 +1,37 @@
+---
+- name: Test we can write global config with default configuration
+  hosts: all
+  vars:
+    __ssh_test_backup_files:
+      - /etc/ssh/ssh_config.d/00-ansible.conf
+      - /etc/ssh/ssh_config
+    __ssh_test_option: >-
+      {% if ansible_facts['os_family'] in ['Ubuntu', 'Debian'] %}
+        HashKnownHosts yes
+      {% elif ansible_facts['distribution'] == 'Fedora' or
+           (ansible_facts['distribution'] in ['RedHat','CentOS'] and
+            ansible_facts['distribution_version']|int >= 8) %}
+        Include /etc/ssh/ssh_config.d/*.conf
+      {% else %}
+        GSSAPIAuthentication yes
+      {% endif %}
+  tasks:
+    - name: Backup configuration files
+      include_tasks: tasks/backup.yml
+
+    - name: Run role
+      include_role:
+        name: linux-system-roles.ssh
+      vars:
+        ssh_skip_defaults: false
+        ssh_config_file: /tmp/ssh_config_with_defaults
+
+    - name: Download the new configuration file
+      slurp:
+        src: /etc/ssh/ssh_config
+      register: config
+
+    - name: Check if the selected options are in
+      assert:
+        that:
+          - "'{{ __ssh_test_option|trim }}' in config.content | b64decode"

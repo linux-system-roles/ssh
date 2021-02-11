@@ -353,14 +353,18 @@ Host {{ host["Condition"] }}
 {{ body_option("VisualHostKey",ssh_VisualHostKey) -}}
 {{ body_option("XAuthLocation",ssh_XAuthLocation) -}}
 {% if ssh['Match'] is defined %}
-{{ match_block(ssh['Match']) -}}
+{{   match_block(ssh['Match']) -}}
+{% elif __ssh_defaults['Match'] is defined and __ssh_skip_defaults|trim|bool != true %}
+{{   match_block(__ssh_defaults['Match']) -}}
 {% endif %}
 {% if ssh_Match is defined %}
-{{ match_block(ssh_Match) -}}
+{{   match_block(ssh_Match) -}}
 {% endif %}
 {% if ssh['Host'] is defined %}
-{{ host_block(ssh['Host']) -}}
+{{   host_block(ssh['Host']) -}}
+{% elif __ssh_defaults['Host'] is defined and __ssh_skip_defaults|trim|bool != true %}
+{{   host_block(__ssh_defaults['Host']) -}}
 {% endif %}
 {% if ssh_Host is defined %}
-{{ host_block(ssh_Host) -}}
+{{   host_block(ssh_Host) -}}
 {% endif %}

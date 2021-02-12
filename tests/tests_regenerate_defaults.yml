@@ -6,6 +6,12 @@
       - /etc/ssh/ssh_config.d/00-ansible.conf
       - /etc/ssh/ssh_config
   tasks:
+    - name: RHEL6 does not support test mode for ssh
+      meta: end_host
+      when:
+        - ansible_facts['distribution'] in ['CentOS', 'RedHat'] and
+          ansible_facts['distribution_version'] | int < 7
+
     - name: Backup configuration files
       include_tasks: tasks/backup.yml
 

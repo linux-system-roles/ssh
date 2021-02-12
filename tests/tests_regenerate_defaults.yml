@@ -12,6 +12,7 @@
     - name: Record default values from configuration file
       command: ssh -G localhost -F /etc/ssh/ssh_config
       register: options_before
+      changed_when: false
 
     - name: Truncate configuration file
       file:
@@ -28,6 +29,7 @@
     - name: Record values in new configuration file
       command: ssh -G localhost -F /etc/ssh/ssh_config
       register: options_after
+      changed_when: false
 
     - name: Verify configuration is same
       assert:

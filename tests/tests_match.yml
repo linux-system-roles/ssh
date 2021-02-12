@@ -55,12 +55,8 @@
               - "'Host remote' in config.content | b64decode"
               - "'Hostname remote.example.com' in config.content | b64decode"
 
-        - name: RHEL6 does not support test mode for ssh
-          meta: end_host
-          when:
-            - ansible_facts['distribution'] in ['CentOS', 'RedHat'] and
-              ansible_facts['distribution_version'] | int < 7
-
+    - name: Verify also runtime configuration
+      block:
         - name: Run first ssh in test mode to evaluate the configuration
           command: ssh -G testuser@example
           register: test1
@@ -88,6 +84,11 @@
               - "'hostname remote.example.com' in test3.stdout"
               - "'hostname remote.example.com' not in test1.stdout"
               - "'hostname remote.example.com' not in test2.stdout"
+
+      when:
+        - ansible_facts['distribution'] not in ['CentOS', 'RedHat'] or
+          ansible_facts['distribution_version'] | int > 6
+
 
     - name: Restore configuration files
       include_tasks: tasks/restore.yml

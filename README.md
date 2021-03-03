@@ -37,11 +37,11 @@ automatically disabled, when a drop-in configuration file is created
  * `ssh_drop_in_name`:
 
 This defines the name for the drop-in configuration file to be placed in
-system-wide drop-in directory. The name is used in the template defined by
-(by default `/etc/ssh/ssh_config.d/{name}.conf`) to reference the
-configuration file to be modified. If the system does not support drop-in
-directory, setting this option will make the play fail. Default is `null`
-if the system does not support drop in directory and `00-ansible` otherwise.
+system-wide drop-in directory. The name is used in the template
+`/etc/ssh/ssh_config.d/{name}.conf` to reference the configuration file to
+be modified. If the system does not support drop-in directory, setting this
+option will make the play fail. Default is `null` if the system does not
+support drop in directory and `00-ansible` otherwise.
 
 The suggested format is `NN-name`, where `NN` is two-digit number used for
 sorting the and `name` is any descriptive name for the content or the owner

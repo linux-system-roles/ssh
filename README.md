@@ -21,7 +21,7 @@ not keep comments and order of the options).
 
  * `ssh_user`:
 
-By default (*null*) the role will modify the global configuration for all
+By default (`null`) the role will modify the global configuration for all
 users. Other values will be interpreted as a username and the role will
 modify per-user configuration stored under `~/.ssh/config` of the given user.
 The user needs to exist before invoking this role otherwise it will fail.
@@ -79,16 +79,17 @@ owned by `root:root` with mode `0644` by default, unless
 `ssh_user!=null`. In that case, the mode is `0600` and owner and
 group are derived from username given in `ssh_user` variable.
 
-
-
 ## Dependencies
 
 none
 
 ## Example Playbook
 
-Including an example of how to use your role (for instance, with variables
-passed in as parameters) is always nice for users too:
+The folowing playbook configures the `root` user ssh configuration in his
+home directory to use compression, control-master multiplexing and enable
+GSSAPI authentication in the "match final all" block. Additionally, it
+creates alias "example" for connecting to the example.com host as a user
+somebody. The last line disables X11 forwarding.
 
 ```yaml
 - hosts: all
@@ -100,7 +101,6 @@ passed in as parameters) is always nice for users too:
       ssh_user: root
       ssh:
         Compression: true
-        GSSAPIAuthentication: no
         ControlMaster: auto
         ControlPath: ~/.ssh/.cm%C
         Match:
@@ -113,8 +113,7 @@ passed in as parameters) is always nice for users too:
       ssh_ForwardX11: no
 ```
 
-More examples can be provided in the [`examples/`](examples) directory. These
-can be useful especially for documentation.
+More examples are in the [`examples/`](examples) directory.
 
 ## License
 

@@ -1,0 +1,90 @@
+---
+- name: Test forced creation of the configuration snippet in drop in directory
+  hosts: all
+  vars:
+    __ssh_test_backup_files:
+      - /etc/ssh/ssh_config.d/99-last.conf
+      - /etc/ssh/ssh_config
+
+  tasks:
+    - name: Backup configuration files
+      include_tasks: tasks/backup.yml
+
+- name: Run role
+  hosts: all
+  roles:
+    - linux-system-roles.ssh
+  vars:
+    ssh_drop_in_name: 99-last
+    ssh:
+      GSSAPIAuthentication: no
+      Host:
+        Condition: example
+        Hostname: example.com
+        User: somebody
+
+- hosts: all
+  tasks:
+    - name: Skip if the system does not support drop in directory
+      meta: end_host
+      when:
+        - ansible_facts['distribution'] != 'Fedora' and
+          not (ansible_facts['distribution'] in ['RedHat','CentOS'] and
+               ansible_facts['distribution_version'] | int >= 8)
+
+    - name: Verify the configuration file was created with right content
+      vars:
+        ssh_test_config_file: /etc/ssh/ssh_config.d/99-last.conf
+      block:
+        - name: Download the included configuration file
+          slurp:
+            src: "{{ ssh_test_config_file }}"
+          register: config
+
+        - name: Stat the configuration file too
+          stat:
+            path: "{{ ssh_test_config_file }}"
+          register:
+            config_mode
+
+        - name: Verify the options are in the file
+          assert:
+            that:
+              - "'\nGSSAPIAuthentication no' in config.content | b64decode"
+              - "'Host example' in config.content | b64decode"
+              - "'Hostname example.com' in config.content | b64decode"
+              - "'User somebody' in config.content | b64decode"
+              # common defaults should be skipped (ssh_skip_defaults=auto)
+              - "'Include' not in config.content | b64decode"
+              - "'SendEnv' not in config.content | b64decode"
+
+        - name: Download the main configuration file too
+          slurp:
+            src: "/etc/ssh/ssh_config"
+          register: global_config
+
+        - name: Verify the options are NOT in the global configuration file
+          assert:
+            that:
+              - "'\nGSSAPIAuthentication no' not in content"
+              - "'Host example' not in content"
+              - "'User somebody' not in content"
+          vars:
+            content: "{{ global_config.content | b64decode }}"
+
+        - name: Verify the file has default sensible permissions
+          assert:
+            that:
+              - config_mode.stat.exists
+              - config_mode.stat.gr_name == 'root'
+              - config_mode.stat.pw_name == 'root'
+              - config_mode.stat.mode == '0644'
+
+- hosts: all
+  vars:
+    __ssh_test_backup_files:
+      - /etc/ssh/ssh_config.d/99-last.conf
+      - /etc/ssh/ssh_config
+  tasks:
+    - name: Restore configuration files
+      include_tasks: tasks/restore.yml

@@ -3,6 +3,8 @@
 __ssh_packages: [ 'openssh', 'openssh-clients']
 __ssh_drop_in_template: /etc/ssh/ssh_config.d/{name}.conf
 
+__ssh_drop_in_name: null
+
 # support flags
 __ssh_supports_drop_in: false
 __ssh_supports_validate: true

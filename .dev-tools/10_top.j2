@@ -1,7 +1,7 @@
 # {{ ansible_managed }}
 {% macro render_option(key,value,indent=false) %}
 {%   if value is defined %}
-{%     if indent == true %}  {% endif %}
+{%     if indent %}  {% endif %}
 {%     if value is sameas true %}
 {{ key }} yes
 {%     elif value is sameas false %}
@@ -21,7 +21,7 @@
 {%     set value = override %}
 {%   elif ssh[key] is defined %}
 {%     set value = ssh[key] %}
-{%   elif __ssh_defaults[key] is defined and __ssh_skip_defaults|trim|bool != true %}
+{%   elif __ssh_defaults[key] is defined and not __ssh_skip_defaults|trim|bool %}
 {%     set value = __ssh_defaults[key] %}
 {%   endif %}
 {{ render_option(key,value) -}}

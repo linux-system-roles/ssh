@@ -27,6 +27,7 @@ EnableSSHKeysign
 EscapeChar
 ExitOnForwardFailure
 FingerprintHash
+ForkAfterAuthentication
 ForwardAgent
 ForwardX11
 ForwardX11Timeout
@@ -90,7 +91,9 @@ SecurityKeyProvider
 SendEnv
 ServerAliveCountMax
 ServerAliveInterval
+SessionType
 SetEnv
+StdinNull
 StreamLocalBindMask
 StreamLocalBindUnlink
 StrictHostKeyChecking

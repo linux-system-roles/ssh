@@ -62,6 +62,7 @@ Match {{ match["Condition"] }}
 {{       render_option("EscapeChar",match["EscapeChar"],true) -}}
 {{       render_option("ExitOnForwardFailure",match["ExitOnForwardFailure"],true) -}}
 {{       render_option("FingerprintHash",match["FingerprintHash"],true) -}}
+{{       render_option("ForkAfterAuthentication",match["ForkAfterAuthentication"],true) -}}
 {{       render_option("ForwardAgent",match["ForwardAgent"],true) -}}
 {{       render_option("ForwardX11",match["ForwardX11"],true) -}}
 {{       render_option("ForwardX11Timeout",match["ForwardX11Timeout"],true) -}}
@@ -125,7 +126,9 @@ Match {{ match["Condition"] }}
 {{       render_option("SendEnv",match["SendEnv"],true) -}}
 {{       render_option("ServerAliveCountMax",match["ServerAliveCountMax"],true) -}}
 {{       render_option("ServerAliveInterval",match["ServerAliveInterval"],true) -}}
+{{       render_option("SessionType",match["SessionType"],true) -}}
 {{       render_option("SetEnv",match["SetEnv"],true) -}}
+{{       render_option("StdinNull",match["StdinNull"],true) -}}
 {{       render_option("StreamLocalBindMask",match["StreamLocalBindMask"],true) -}}
 {{       render_option("StreamLocalBindUnlink",match["StreamLocalBindUnlink"],true) -}}
 {{       render_option("StrictHostKeyChecking",match["StrictHostKeyChecking"],true) -}}
@@ -179,6 +182,7 @@ Host {{ host["Condition"] }}
 {{       render_option("EscapeChar",host["EscapeChar"],true) -}}
 {{       render_option("ExitOnForwardFailure",host["ExitOnForwardFailure"],true) -}}
 {{       render_option("FingerprintHash",host["FingerprintHash"],true) -}}
+{{       render_option("ForkAfterAuthentication",host["ForkAfterAuthentication"],true) -}}
 {{       render_option("ForwardAgent",host["ForwardAgent"],true) -}}
 {{       render_option("ForwardX11",host["ForwardX11"],true) -}}
 {{       render_option("ForwardX11Timeout",host["ForwardX11Timeout"],true) -}}
@@ -242,7 +246,9 @@ Host {{ host["Condition"] }}
 {{       render_option("SendEnv",host["SendEnv"],true) -}}
 {{       render_option("ServerAliveCountMax",host["ServerAliveCountMax"],true) -}}
 {{       render_option("ServerAliveInterval",host["ServerAliveInterval"],true) -}}
+{{       render_option("SessionType",host["SessionType"],true) -}}
 {{       render_option("SetEnv",host["SetEnv"],true) -}}
+{{       render_option("StdinNull",host["StdinNull"],true) -}}
 {{       render_option("StreamLocalBindMask",host["StreamLocalBindMask"],true) -}}
 {{       render_option("StreamLocalBindUnlink",host["StreamLocalBindUnlink"],true) -}}
 {{       render_option("StrictHostKeyChecking",host["StrictHostKeyChecking"],true) -}}
@@ -289,6 +295,7 @@ Host {{ host["Condition"] }}
 {{ body_option("EscapeChar",ssh_EscapeChar) -}}
 {{ body_option("ExitOnForwardFailure",ssh_ExitOnForwardFailure) -}}
 {{ body_option("FingerprintHash",ssh_FingerprintHash) -}}
+{{ body_option("ForkAfterAuthentication",ssh_ForkAfterAuthentication) -}}
 {{ body_option("ForwardAgent",ssh_ForwardAgent) -}}
 {{ body_option("ForwardX11",ssh_ForwardX11) -}}
 {{ body_option("ForwardX11Timeout",ssh_ForwardX11Timeout) -}}
@@ -352,7 +359,9 @@ Host {{ host["Condition"] }}
 {{ body_option("SendEnv",ssh_SendEnv) -}}
 {{ body_option("ServerAliveCountMax",ssh_ServerAliveCountMax) -}}
 {{ body_option("ServerAliveInterval",ssh_ServerAliveInterval) -}}
+{{ body_option("SessionType",ssh_SessionType) -}}
 {{ body_option("SetEnv",ssh_SetEnv) -}}
+{{ body_option("StdinNull",ssh_StdinNull) -}}
 {{ body_option("StreamLocalBindMask",ssh_StreamLocalBindMask) -}}
 {{ body_option("StreamLocalBindUnlink",ssh_StreamLocalBindUnlink) -}}
 {{ body_option("StrictHostKeyChecking",ssh_StrictHostKeyChecking) -}}

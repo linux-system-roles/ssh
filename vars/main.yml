@@ -11,3 +11,10 @@ __ssh_supports_validate: true
 
 # The default options found in the main configuration file
 __ssh_defaults: {}
+
+# ansible_facts required by the role
+__ssh_required_facts:
+  - distribution
+  - distribution_major_version
+  - distribution_version
+  - os_family

@@ -1,18 +1,36 @@
-name: Run tests on Ubuntu latest
+name: Run tests on Ubuntu
 
 on:  # yamllint disable-line rule:truthy
   - push
   - pull_request
 
 jobs:
-  build:
+  ubuntu-latest:
     runs-on: ubuntu-latest
     steps:
-      # Important: This sets up your GITHUB_WORKSPACE environment variable
       - uses: actions/checkout@v2
 
       - name: ansible check with ubuntu:latest
-        uses: roles-ansible/check-ansible-ubuntu-latest-action@master
+        # the upstream is broken:
+        # https://github.com/roles-ansible/check-ansible-ubuntu-latest-action/pull/2
+        # uses: roles-ansible/check-ansible-ubuntu-latest-action@master
+        uses: Jakuje/check-ansible-ubuntu-latest-action@patch-1
+        with:
+          group: local
+          hosts: localhost
+          targets: "tests/tests_*.yml"
+
+  ubuntu-20:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout PR
+        uses: actions/checkout@v2
+
+      - name: ansible check with ubuntu:20 (focal)
+        # the upstream is broken:
+        # https://github.com/roles-ansible/check-ansible-ubuntu-focal-action/pull/2
+        # uses: roles-ansible/check-ansible-ubuntu-focal-action@master
+        uses: Jakuje/check-ansible-ubuntu-focal-action@patch-1
         with:
           group: local
           hosts: localhost

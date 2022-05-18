@@ -28,6 +28,7 @@ galaxy_info:
         - xenial
         - bionic
         - focal
+        - jammy
   galaxy_tags:
     - networking
     - system

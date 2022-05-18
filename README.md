@@ -1,5 +1,7 @@
 # ssh
 ![CI Testing](https://github.com/linux-system-roles/ssh/workflows/tox/badge.svg)
+[![CI Ubuntu](https://github.com/linux-system-roles/ssh/actions/workflows/ansible-ubuntu.yml/badge.svg)](https://github.com/linux-system-roles/ssh/actions/workflows/ansible-ubuntu.yml)
+[![CI Debian](https://github.com/linux-system-roles/ssh/actions/workflows/ansible-debian.yml/badge.svg)](https://github.com/linux-system-roles/ssh/actions/workflows/ansible-debian.yml)
 
 An Ansible role for managing ssh clients configuration.
 
@@ -8,8 +10,8 @@ An Ansible role for managing ssh clients configuration.
 This role should work on any system that provides openssh client and is
 supported by ansible. The role was tested on:
 
- * RHEL/CentOS 6, 7, 8
- * Fedora 32, 33
+ * RHEL/CentOS 6, 7, 8, 9
+ * Fedora
  * Debian
  * Ubuntu
 
@@ -121,4 +123,4 @@ LGPLv3, see the file LICENSE for more information.
 
 ## Author Information
 
-Jakub Jelen, 2021
+Jakub Jelen, 2021 - 2022

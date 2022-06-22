@@ -1,6 +1,7 @@
 ---
 - name: Test we can handle all configuration options documented in manual page
   hosts: all
+  gather_facts: true
   vars:
     ssh_c: {}
   tasks:

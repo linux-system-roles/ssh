@@ -1,6 +1,7 @@
 ---
 - name: Verify default packages as well as additional are installed
   hosts: all
+  gather_facts: true
   vars:
     __ssh_test_backup_files:
       - /etc/ssh/ssh_config.d/00-ansible.conf

@@ -1,6 +1,7 @@
 ---
 - name: Test we can write global config with default configuration
   hosts: all
+  gather_facts: true
   vars:
     __ssh_test_backup_files:
       - /etc/ssh/ssh_config.d/00-ansible.conf

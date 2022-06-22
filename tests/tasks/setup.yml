@@ -1,4 +1,9 @@
 ---
+- name: Ensure facts used by test
+  setup:
+    gather_subset: min
+  when: "'os_family' not in ansible_facts"
+
 - name: Make sure openssh is installed before creating backup
   vars:
     - __ssh_test_packages: >-

@@ -1,6 +1,7 @@
 ---
 - name: Test forced creation of the configuration snippet in drop in directory
   hosts: all
+  gather_facts: true
   vars:
     __ssh_test_backup_files:
       - /etc/ssh/ssh_config.d/99-last.conf

@@ -1,6 +1,7 @@
 ---
 - name: Verify default packages as well as additional are installed
   hosts: all
+  gather_facts: true
   vars:
     additional_package: >-
       {% if ansible_facts['distribution'] in [ 'RedHat', 'CentOS' ] and

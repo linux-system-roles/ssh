@@ -1,6 +1,7 @@
 ---
 - name: Test a creation of configuration file in the user directory
   hosts: all
+  gather_facts: true
   vars:
     __ssh_test_backup_files:
       - /etc/ssh/ssh_config.d/00-ansible.conf

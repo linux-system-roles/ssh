@@ -1,5 +1,6 @@
 ---
 - name: Test we can write global config with default configuration
+  gather_facts: true
   hosts: all
   vars:
     __ssh_test_backup_files:

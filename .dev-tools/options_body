@@ -87,6 +87,7 @@ RequestTTY
 RevokedHostKeys
 RhostsRSAAuthentication
 RSAAuthentication
+RSAMinSize
 SecurityKeyProvider
 SendEnv
 ServerAliveCountMax

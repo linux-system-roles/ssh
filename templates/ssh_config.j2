@@ -122,6 +122,7 @@ Match {{ match["Condition"] }}
 {{       render_option("RevokedHostKeys",match["RevokedHostKeys"],true) -}}
 {{       render_option("RhostsRSAAuthentication",match["RhostsRSAAuthentication"],true) -}}
 {{       render_option("RSAAuthentication",match["RSAAuthentication"],true) -}}
+{{       render_option("RSAMinSize",match["RSAMinSize"],true) -}}
 {{       render_option("SecurityKeyProvider",match["SecurityKeyProvider"],true) -}}
 {{       render_option("SendEnv",match["SendEnv"],true) -}}
 {{       render_option("ServerAliveCountMax",match["ServerAliveCountMax"],true) -}}
@@ -242,6 +243,7 @@ Host {{ host["Condition"] }}
 {{       render_option("RevokedHostKeys",host["RevokedHostKeys"],true) -}}
 {{       render_option("RhostsRSAAuthentication",host["RhostsRSAAuthentication"],true) -}}
 {{       render_option("RSAAuthentication",host["RSAAuthentication"],true) -}}
+{{       render_option("RSAMinSize",host["RSAMinSize"],true) -}}
 {{       render_option("SecurityKeyProvider",host["SecurityKeyProvider"],true) -}}
 {{       render_option("SendEnv",host["SendEnv"],true) -}}
 {{       render_option("ServerAliveCountMax",host["ServerAliveCountMax"],true) -}}
@@ -355,6 +357,7 @@ Host {{ host["Condition"] }}
 {{ body_option("RevokedHostKeys",ssh_RevokedHostKeys) -}}
 {{ body_option("RhostsRSAAuthentication",ssh_RhostsRSAAuthentication) -}}
 {{ body_option("RSAAuthentication",ssh_RSAAuthentication) -}}
+{{ body_option("RSAMinSize",ssh_RSAMinSize) -}}
 {{ body_option("SecurityKeyProvider",ssh_SecurityKeyProvider) -}}
 {{ body_option("SendEnv",ssh_SendEnv) -}}
 {{ body_option("ServerAliveCountMax",ssh_ServerAliveCountMax) -}}

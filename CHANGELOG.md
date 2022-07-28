@@ -1,6 +1,21 @@
 Changelog
 =========
 
+[1.1.9] - 2022-07-26
+--------------------
+
+### New Features
+
+- add RSAMinSize parameter (#45)
+
+### Bug Fixes
+
+- none
+
+### Other Changes
+
+- changelog_to_tag action - support other than "master" for the main branch name, as well (#46)
+
 [1.1.8] - 2022-07-19
 --------------------
 

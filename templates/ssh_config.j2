@@ -10,7 +10,7 @@
 {{ key }} {{ value | string }}
 {%     else %}
 {%       for i in value %}
-{{ key }} {{ i }}
+{{ key }} {{ i | string }}
 {%       endfor %}
 {%     endif %}
 {%   endif %}

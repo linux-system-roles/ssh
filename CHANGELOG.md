@@ -1,6 +1,25 @@
 Changelog
 =========
 
+[1.1.10] - 2022-09-19
+--------------------
+
+### New Features
+
+- none
+
+### Bug Fixes
+
+- cast value to string in jinja macro (#50)
+
+Some versions of jinja will not automatically convert values to
+string in a `{{ ... }}` block, so use `| string` to ensure that
+it is converted to string.
+
+### Other Changes
+
+- none
+
 [1.1.9] - 2022-07-26
 --------------------
 

@@ -119,6 +119,7 @@ Match {{ match["Condition"] }}
 {{       render_option("RemoteCommand",match["RemoteCommand"],true) -}}
 {{       render_option("RemoteForward",match["RemoteForward"],true) -}}
 {{       render_option("RequestTTY",match["RequestTTY"],true) -}}
+{{       render_option("RequiredRSASize",match["RequiredRSASize"],true) -}}
 {{       render_option("RevokedHostKeys",match["RevokedHostKeys"],true) -}}
 {{       render_option("RhostsRSAAuthentication",match["RhostsRSAAuthentication"],true) -}}
 {{       render_option("RSAAuthentication",match["RSAAuthentication"],true) -}}
@@ -240,6 +241,7 @@ Host {{ host["Condition"] }}
 {{       render_option("RemoteCommand",host["RemoteCommand"],true) -}}
 {{       render_option("RemoteForward",host["RemoteForward"],true) -}}
 {{       render_option("RequestTTY",host["RequestTTY"],true) -}}
+{{       render_option("RequiredRSASize",host["RequiredRSASize"],true) -}}
 {{       render_option("RevokedHostKeys",host["RevokedHostKeys"],true) -}}
 {{       render_option("RhostsRSAAuthentication",host["RhostsRSAAuthentication"],true) -}}
 {{       render_option("RSAAuthentication",host["RSAAuthentication"],true) -}}
@@ -354,6 +356,7 @@ Host {{ host["Condition"] }}
 {{ body_option("RemoteCommand",ssh_RemoteCommand) -}}
 {{ body_option("RemoteForward",ssh_RemoteForward) -}}
 {{ body_option("RequestTTY",ssh_RequestTTY) -}}
+{{ body_option("RequiredRSASize",ssh_RequiredRSASize) -}}
 {{ body_option("RevokedHostKeys",ssh_RevokedHostKeys) -}}
 {{ body_option("RhostsRSAAuthentication",ssh_RhostsRSAAuthentication) -}}
 {{ body_option("RSAAuthentication",ssh_RSAAuthentication) -}}

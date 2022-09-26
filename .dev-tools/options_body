@@ -84,6 +84,7 @@ RekeyLimit
 RemoteCommand
 RemoteForward
 RequestTTY
+RequiredRSASize
 RevokedHostKeys
 RhostsRSAAuthentication
 RSAAuthentication

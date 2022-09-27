@@ -1,6 +1,30 @@
 Changelog
 =========
 
+[1.1.11] - 2022-09-27
+--------------------
+
+### New Features
+
+- Add final version of the option RequiredRSASize (#53)
+
+Update source template to match generated template
+
+Add final name of the RequiredRSASize parameter
+
+keeping the old version for backward compatibility.
+
+Upstream commit:
+https://github.com/openssh/openssh-portable/commit/54b333d1
+
+### Bug Fixes
+
+- none
+
+### Other Changes
+
+- none
+
 [1.1.10] - 2022-09-19
 --------------------
 

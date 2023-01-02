@@ -17,17 +17,17 @@
       vars:
         ssh:
           Compression: true
-          GSSAPIAuthentication: no
+          GSSAPIAuthentication: false
           ControlMaster: auto
           ControlPath: ~/.ssh/.cm%C
           Match:
             - Condition: "all"
-              GSSAPIAuthentication: yes
+              GSSAPIAuthentication: true
           Host:
             Condition: example
             Hostname: example.com
             User: somebody
-        ssh_ForwardX11: no
+        ssh_ForwardX11: false
         ssh_Match:
           Condition: "exec true"
           User: nobody

@@ -38,7 +38,7 @@
       {% else %}
         true %s
       {% endif %}
-    backup: yes
+    backup: true
   vars:
     __ssh_skip_defaults: >-
       {% if ssh_skip_defaults != 'auto' %}

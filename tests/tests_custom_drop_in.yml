@@ -23,7 +23,7 @@
       vars:
         ssh:
           Compression: true
-          GSSAPIAuthentication: no
+          GSSAPIAuthentication: false
         __ssh_drop_in_template: /tmp/ssh_config.d_{name}.conf
 
     - name: Verify the configuration file was created in the right place

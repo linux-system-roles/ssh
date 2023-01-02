@@ -26,7 +26,7 @@
       vars:
         ssh_user: "{{ username }}"
         ssh:
-          GSSAPIAuthentication: no
+          GSSAPIAuthentication: false
           Host:
             Condition: example
             Hostname: example.com

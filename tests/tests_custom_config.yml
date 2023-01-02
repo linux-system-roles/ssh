@@ -8,7 +8,7 @@
       vars:
         ssh:
           Compression: true
-          GSSAPIAuthentication: no
+          GSSAPIAuthentication: false
         ssh_config_file: /tmp/ssh_config
         ssh_skip_defaults: true
 

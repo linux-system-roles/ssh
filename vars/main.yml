@@ -1,6 +1,7 @@
+---
 ########## Internal defaults ##########
 # default list of mandatory packages
-__ssh_packages: [ 'openssh', 'openssh-clients']
+__ssh_packages: ['openssh', 'openssh-clients']
 __ssh_drop_in_template: /etc/ssh/ssh_config.d/{name}.conf
 
 __ssh_drop_in_name: null

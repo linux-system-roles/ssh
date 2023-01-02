@@ -17,7 +17,7 @@
       vars:
         ssh:
           Compression: true
-          GSSAPIAuthentication: no
+          GSSAPIAuthentication: false
         # bad example
         ssh_config_owner: daemon
         ssh_config_group: daemon

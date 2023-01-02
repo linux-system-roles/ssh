@@ -9,14 +9,14 @@
       ssh_user: root
       ssh:
         Compression: true
-        GSSAPIAuthentication: no
+        GSSAPIAuthentication: false
         ControlMaster: auto
         ControlPath: ~/.ssh/.cm%C
         Match:
           - Condition: "final all"
-            GSSAPIAuthentication: yes
+            GSSAPIAuthentication: true
         Host:
           - Condition: example
             Hostname: example.com
             User: somebody
-      ssh_ForwardX11: no
+      ssh_ForwardX11: false

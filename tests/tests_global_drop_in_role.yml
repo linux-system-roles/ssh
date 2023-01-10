@@ -6,7 +6,6 @@
     __ssh_test_backup_files:
       - /etc/ssh/ssh_config.d/99-last.conf
       - /etc/ssh/ssh_config
-
   tasks:
     - name: Backup configuration files
       include_tasks: tasks/backup.yml
@@ -24,7 +23,8 @@
         Hostname: example.com
         User: somebody
 
-- hosts: all
+- name: Verify drop in file configuration
+  hosts: all
   tasks:
     - name: Skip if the system does not support drop in directory
       meta: end_host
@@ -81,7 +81,8 @@
               - config_mode.stat.pw_name == 'root'
               - config_mode.stat.mode == '0644'
 
-- hosts: all
+- name: Restore configuration
+  hosts: all
   vars:
     __ssh_test_backup_files:
       - /etc/ssh/ssh_config.d/99-last.conf

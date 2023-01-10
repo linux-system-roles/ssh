@@ -1,5 +1,5 @@
 {{ ansible_managed | comment }}
-{% macro render_option(key,value,indent=false) %}
+{% macro render_option(key, value, indent=false) %}
 {%   if value is defined %}
 {%     if indent %}  {% endif %}
 {%     if value is sameas true %}
@@ -15,13 +15,13 @@
 {%     endif %}
 {%   endif %}
 {% endmacro %}
-{% macro body_option(key,override) %}
+{% macro body_option(key, override) %}
 {%   set value = undefined %}
 {%   if override is defined %}
 {%     set value = override %}
 {%   elif ssh[key] is defined %}
 {%     set value = ssh[key] %}
-{%   elif __ssh_defaults[key] is defined and not __ssh_skip_defaults|trim|bool %}
+{%   elif __ssh_defaults[key] is defined and not __ssh_skip_defaults | trim | bool %}
 {%     set value = __ssh_defaults[key] %}
 {%   endif %}
 {{ render_option(key,value) -}}
@@ -384,7 +384,7 @@ Host {{ host["Condition"] }}
 {{ body_option("XAuthLocation",ssh_XAuthLocation) -}}
 {% if ssh['Match'] is defined %}
 {{   match_block(ssh['Match']) -}}
-{% elif __ssh_defaults['Match'] is defined and not __ssh_skip_defaults|trim|bool %}
+{% elif __ssh_defaults['Match'] is defined and not __ssh_skip_defaults | trim | bool %}
 {{   match_block(__ssh_defaults['Match']) -}}
 {% endif %}
 {% if ssh_Match is defined %}
@@ -392,7 +392,7 @@ Host {{ host["Condition"] }}
 {% endif %}
 {% if ssh['Host'] is defined %}
 {{   host_block(ssh['Host']) -}}
-{% elif __ssh_defaults['Host'] is defined and not __ssh_skip_defaults|trim|bool %}
+{% elif __ssh_defaults['Host'] is defined and not __ssh_skip_defaults | trim | bool %}
 {{   host_block(__ssh_defaults['Host']) -}}
 {% endif %}
 {% if ssh_Host is defined %}

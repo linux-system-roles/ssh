@@ -1,8 +1,9 @@
 ---
-- hosts: all
+- name: Test role variable override
+  hosts: all
   gather_facts: true
   tasks:
-    - name: create var file in caller that can override the one in called role
+    - name: Create var file in caller that can override the one in called role
       delegate_to: localhost
       copy:
         # usually the fake file will cause the called role to crash of
@@ -12,6 +13,7 @@
         # XXX ugly, self-modifying code - changes the "caller" role on
         # the controller
         dest: "{{ playbook_dir }}/roles/caller/vars/{{ item }}.yml"
+        mode: 0600
       loop: "{{ varfiles | unique }}"
       # In case the playbook is executed against multiple hosts, use
       # only the first one. Otherwise the hosts would stomp on each

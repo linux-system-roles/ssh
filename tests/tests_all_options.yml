@@ -43,7 +43,8 @@
       register: ssh_options
       changed_when: false
 
-    - debug:
+    - name: Show ssh_options
+      debug:
         var: ssh_options.stdout_lines
 
     - name: Construct the configuration list

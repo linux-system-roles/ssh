@@ -15,6 +15,7 @@
       include_role:
         name: linux-system-roles.ssh
       vars:
+        # noqa var-naming
         ssh:
           Compression: true
           GSSAPIAuthentication: false
@@ -42,7 +43,7 @@
             "/etc/ssh/ssh_config.d/00-ansible.conf"
             if ansible_facts['distribution'] == 'Fedora' or
                (ansible_facts['distribution'] in ['RedHat','CentOS'] and
-                ansible_facts['distribution_version']|int >= 8)
+                ansible_facts['distribution_version'] | int >= 8)
             else "/etc/ssh/ssh_config"
           }}
 

@@ -15,6 +15,7 @@
       include_role:
         name: linux-system-roles.ssh
       vars:
+        # noqa var-naming
         ssh:
           Match:
             - Condition: user testuser
@@ -33,8 +34,8 @@
           {{
             "/etc/ssh/ssh_config.d/00-ansible.conf"
             if ansible_facts['distribution'] == 'Fedora' or
-               (ansible_facts['distribution'] in ['RedHat','CentOS'] and
-                ansible_facts['distribution_version']|int >= 8)
+               (ansible_facts['distribution'] in ['RedHat', 'CentOS'] and
+                ansible_facts['distribution_version'] | int >= 8)
             else "/etc/ssh/ssh_config"
           }}
 
@@ -57,18 +58,24 @@
               - "'Hostname remote.example.com' in config.content | b64decode"
 
     - name: Verify also runtime configuration
+      when:
+        - ansible_facts['distribution'] not in ['CentOS', 'RedHat'] or
+          ansible_facts['distribution_version'] | int > 6
       block:
         - name: Run first ssh in test mode to evaluate the configuration
           command: ssh -G testuser@example
           register: test1
+          changed_when: false
 
         - name: Run second ssh in test mode to evaluate the configuration
           command: ssh -G local
           register: test2
+          changed_when: false
 
         - name: Run third ssh in test mode to evaluate the configuration
           command: ssh -G remote
           register: test3
+          changed_when: false
 
         - name: Verify the options are correctly evaluated
           assert:
@@ -85,11 +92,6 @@
               - "'hostname remote.example.com' in test3.stdout"
               - "'hostname remote.example.com' not in test1.stdout"
               - "'hostname remote.example.com' not in test2.stdout"
-
-      when:
-        - ansible_facts['distribution'] not in ['CentOS', 'RedHat'] or
-          ansible_facts['distribution_version'] | int > 6
-
 
     - name: Restore configuration files
       include_tasks: tasks/restore.yml

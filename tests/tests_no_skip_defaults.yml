@@ -10,8 +10,8 @@
       {% if ansible_facts['os_family'] in ['Ubuntu', 'Debian'] %}
         HashKnownHosts yes
       {% elif ansible_facts['distribution'] == 'Fedora' or
-           (ansible_facts['distribution'] in ['RedHat','CentOS'] and
-            ansible_facts['distribution_version']|int >= 8) %}
+           (ansible_facts['distribution'] in ['RedHat', 'CentOS'] and
+            ansible_facts['distribution_version'] | int >= 8) %}
         Include /etc/ssh/ssh_config.d/*.conf
       {% else %}
         GSSAPIAuthentication yes
@@ -37,5 +37,5 @@
     - name: Check if the selected options are in
       assert:
         that:
-          - "'{{ __ssh_test_option|trim }}' in config.content | b64decode"
+          - "'{{ __ssh_test_option | trim }}' in config.content | b64decode"
           - "'LocalForward 2222 localhost:22' in config.content | b64decode"

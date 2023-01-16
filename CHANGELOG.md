@@ -72,7 +72,7 @@ it is converted to string.
 
 ### Other Changes
 
-- changelog_to_tag action - support other than "master" for the main branch name, as well (#46)
+- changelog_to_tag action - github action ansible test improvements (#46)
 
 [1.1.8] - 2022-07-19
 --------------------
@@ -253,7 +253,7 @@ must be a `string` value like `"2.9"`, not a `float` value like `2.9`.
 ### Other Changes
 
 - Remove python-26 environment from tox testing
-- update to tox-lsr 2.4.0 - add support for ansible-test sanity with docker
+- update to tox-lsr 2.4.0 - add support for ansible-test with docker
 - CI: Add support for RHEL-9
 
 [1.0.0] - 2021-02-12

@@ -3,22 +3,23 @@
 - name: Example playbook for configuring ssh clients
   hosts: all
   tasks:
-  - name: Configure ssh clients
-    include_role:
-      name: linux-system-roles.ssh
-    vars:
-      ssh_user: root
-      ssh:
-        # noqa var-naming
-        Compression: true
-        GSSAPIAuthentication: false
-        ControlMaster: auto
-        ControlPath: ~/.ssh/.cm%C
-        Match:
-          - Condition: "final all"
-            GSSAPIAuthentication: true
-        Host:
-          - Condition: example
-            Hostname: example.com
-            User: somebody
-      ssh_ForwardX11: false
+    - name: Configure ssh clients
+      include_role:
+        name: linux-system-roles.ssh
+      vars:
+        ssh_user: root
+        ssh:
+          # noqa var-naming
+          Compression: true
+          GSSAPIAuthentication: false
+          # wokeignore:rule=master
+          ControlMaster: auto
+          ControlPath: ~/.ssh/.cm%C
+          Match:
+            - Condition: "final all"
+              GSSAPIAuthentication: true
+          Host:
+            - Condition: example
+              Hostname: example.com
+              User: somebody
+        ssh_ForwardX11: false

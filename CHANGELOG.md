@@ -1,6 +1,21 @@
 Changelog
 =========
 
+[1.1.12] - 2023-01-20
+--------------------
+
+### New Features
+
+- none
+
+### Bug Fixes
+
+- ansible-lint 6.x fixes (#60)
+
+### Other Changes
+
+- none
+
 [1.1.11] - 2022-09-27
 --------------------
 

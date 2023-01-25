@@ -1,5 +1,5 @@
 {{ ansible_managed | comment }}
-{% macro render_option(key,value,indent=false) %}
+{% macro render_option(key, value, indent=false) %}
 {%   if value is defined %}
 {%     if indent %}  {% endif %}
 {%     if value is sameas true %}
@@ -15,16 +15,16 @@
 {%     endif %}
 {%   endif %}
 {% endmacro %}
-{% macro body_option(key,override) %}
+{% macro body_option(key, override) %}
 {%   set value = undefined %}
 {%   if override is defined %}
 {%     set value = override %}
 {%   elif ssh[key] is defined %}
 {%     set value = ssh[key] %}
-{%   elif __ssh_defaults[key] is defined and not __ssh_skip_defaults|trim|bool %}
+{%   elif __ssh_defaults[key] is defined and not __ssh_skip_defaults | trim | bool %}
 {%     set value = __ssh_defaults[key] %}
 {%   endif %}
-{{ render_option(key,value) -}}
+{{ render_option(key, value) -}}
 {% endmacro %}
 {% macro match_block(match_list) %}
 {%   if match_list["Condition"] is defined %}

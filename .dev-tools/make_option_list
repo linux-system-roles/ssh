@@ -1,23 +1,20 @@
 #!/bin/sh
 cat 10_top.j2
 
-cat options_body |
-  awk '{
-print "{{       render_option(\""$1"\",match[\""$1"\"],true) -}}"
-}'
+awk '{
+print "{{       render_option(\""$1"\", match[\""$1"\"], true) -}}"
+}' < options_body
 
 cat 20_after_match.j2
 
-cat options_body |
-  awk '{
-print "{{       render_option(\""$1"\",host[\""$1"\"],true) -}}"
-}'
+awk '{
+print "{{       render_option(\""$1"\", host[\""$1"\"], true) -}}"
+}' < options_body
 
 cat 30_after_host.j2
 
-cat options_body |
-  awk '{
-print "{{ body_option(\""$1"\",ssh_"$1") -}}"
-}'
+awk '{
+print "{{ body_option(\""$1"\", ssh_"$1") -}}"
+}' < options_body
 
 cat 40_bottom.j2

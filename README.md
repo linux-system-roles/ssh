@@ -87,7 +87,8 @@ none
 
 ## Example Playbook
 
-The folowing playbook configures the `root` user ssh configuration in his
+The following playbook configures the `root` user ssh configuration in his
+<!--- wokeignore:rule=master -->
 home directory to use compression, control-master multiplexing and enable
 GSSAPI authentication in the "match final all" block. Additionally, it
 creates alias "example" for connecting to the example.com host as a user
@@ -103,6 +104,7 @@ somebody. The last line disables X11 forwarding.
       ssh_user: root
       ssh:
         Compression: true
+        # wokeignore:rule=master
         ControlMaster: auto
         ControlPath: ~/.ssh/.cm%C
         Match:

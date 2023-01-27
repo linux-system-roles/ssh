@@ -19,6 +19,7 @@
         ssh:
           Compression: true
           GSSAPIAuthentication: false
+          # wokeignore:rule=master
           ControlMaster: auto
           ControlPath: ~/.ssh/.cm%C
           Match:
@@ -58,6 +59,7 @@
             that:
               - "'Compression yes' in config.content | b64decode"
               - "'GSSAPIAuthentication no' in config.content | b64decode"
+              # wokeignore:rule=master
               - "'ControlMaster auto' in config.content | b64decode"
               - "'ControlPath ~/.ssh/.cm%C' in config.content | b64decode"
               - "'Match all' in config.content | b64decode"

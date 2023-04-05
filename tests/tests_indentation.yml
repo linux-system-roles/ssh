@@ -1,0 +1,71 @@
+---
+- name: Test indentation
+  gather_facts: true
+  hosts: all
+  vars:
+    ssh_config_file: /tmp/ssh_config
+  tasks:
+    - name: Backup configuration files
+      include_tasks: tasks/backup.yml
+
+    - name: Run role
+      include_role:
+        name: linux-system-roles.ssh
+      vars:
+        # noqa var-naming
+        ssh:
+          Match:
+            - Condition: "all"
+              GSSAPIAuthentication: true
+              SendEnv:
+                - test1_1
+                - test1_2
+          Host:
+            Condition: example
+            Hostname: example.com
+            SendEnv:
+              - test2_1
+              - test2_2
+        ssh_ForwardX11: false
+        ssh_Match:
+          Condition: "exec true"
+          User: nobody
+        ssh_Host:
+          - Condition: local
+            Hostname: local.example.com
+            SendEnv:
+              - test3_1
+              - test3_2
+
+    - name: Verify the configuration file was created with right content
+      block:
+        - name: Download the global configuration file
+          slurp:
+            src: "{{ ssh_config_file }}"
+          register: config
+
+        - name: Verify the options are in the file
+          assert:
+            that:
+              - content is search ("^ForwardX11 no$", multiline=True)
+              - content is search ("^Match all$", multiline=True)
+              - content is search ("^  GSSAPIAuthentication yes$",
+                  multiline=True)
+              - content is search ("^  SendEnv test1_1$", multiline=True)
+              - content is search ("^  SendEnv test1_2$", multiline=True)
+              - content is search ("^Match exec true$", multiline=True)
+              - content is search ("^  User nobody$", multiline=True)
+              - content is search ("^Host example", multiline=True)
+              - content is search ("^  Hostname example.com$", multiline=True)
+              - content is search ("^  SendEnv test2_1$", multiline=True)
+              - content is search ("^  SendEnv test2_2$", multiline=True)
+              - content is search ("^Host local", multiline=True)
+              - content is search ("^  Hostname local.example.com$",
+                  multiline=True)
+              - content is search ("^  SendEnv test3_1$", multiline=True)
+              - content is search ("^  SendEnv test3_2$", multiline=True)
+          vars:
+            content: "{{ config.content | b64decode }}"
+
+    - name: Restore configuration files
+      include_tasks: tasks/restore.yml

@@ -3,6 +3,7 @@
   gather_facts: true
   hosts: all
   vars:
+    ssh_drop_in_name: 00-ansible
     __ssh_test_backup_files:
       - /etc/ssh/ssh_config.d/00-ansible.conf
       - /etc/ssh/ssh_config
@@ -43,8 +44,8 @@
           {{
             "/etc/ssh/ssh_config.d/00-ansible.conf"
             if ansible_facts['distribution'] == 'Fedora' or
-               (ansible_facts['distribution'] in ['RedHat','CentOS'] and
-                ansible_facts['distribution_version'] | int >= 8)
+              (ansible_facts['distribution'] in ['RedHat','CentOS','Rocky']
+                and ansible_facts['distribution_version'] | int >= 8)
             else "/etc/ssh/ssh_config"
           }}
 

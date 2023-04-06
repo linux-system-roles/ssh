@@ -3,6 +3,7 @@
   hosts: all
   gather_facts: true
   vars:
+    ssh_drop_in_name: 00-ansible
     __ssh_test_backup_files:
       - /tmp/ssh_config.d_00-ansible.conf
 
@@ -11,7 +12,7 @@
       meta: end_host
       when:
         - ansible_facts['distribution'] != 'Fedora' and
-          not (ansible_facts['distribution'] in ['RedHat','CentOS'] and
+          not (ansible_facts['distribution'] in ['RedHat','CentOS','Rocky'] and
                ansible_facts['distribution_version'] | int >= 8)
 
     - name: Backup configuration files

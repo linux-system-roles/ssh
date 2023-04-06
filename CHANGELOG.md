@@ -1,6 +1,21 @@
 Changelog
 =========
 
+[1.1.13] - 2023-04-06
+--------------------
+
+### Bug Fixes
+
+- Proper indent when lists are used in block (#80)
+- add vars files for Rocky 8/9 (links) (#81)
+
+### Other Changes
+
+- fix shellcheck issues; fix ansible-lint issues in generation (#69)
+- Add check for non-inclusive language (#64)
+- Add README-ansible.md to refer Ansible intro page on linux-system-roles.github.io (#78)
+- Fingerprint RHEL System Role managed config files (#79)
+
 [1.1.12] - 2023-01-20
 --------------------
 

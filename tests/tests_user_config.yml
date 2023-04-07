@@ -106,6 +106,7 @@
           when:
             - ansible_facts['distribution'] not in ['CentOS', 'RedHat'] or
               ansible_facts['distribution_version'] | int > 6
+          changed_when: false
 
         - name: Make sure the effective configuration is expected
           assert:

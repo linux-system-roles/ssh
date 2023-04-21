@@ -81,5 +81,11 @@
           when:
             - ssh_config_file != "/etc/ssh/ssh_config"
 
+        - name: Check header for ansible_managed, fingerprint
+          include_tasks: tasks/check_header.yml
+          vars:
+            __file_content: "{{ config }}"
+            __fingerprint: "system_role:ssh"
+
     - name: Restore configuration files
       include_tasks: tasks/restore.yml

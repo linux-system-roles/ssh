@@ -82,6 +82,10 @@ owned by `root:root` with mode `0644` by default, unless
 `ssh_user!=null`. In that case, the mode is `0600` and owner and
 group are derived from username given in `ssh_user` variable.
 
+### ssh_backup
+
+When set to *false*, the original `ssh_config` file is not backed up. Default is *true*.
+
 ## Example Playbook
 
 The following playbook configures the `root` user ssh configuration in his

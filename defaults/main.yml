@@ -23,3 +23,6 @@ ssh_config_mode: null
 
 # the override for the configuration file we are writing
 ssh_config_file: null
+
+# create backup of ssh_config
+ssh_backup: true

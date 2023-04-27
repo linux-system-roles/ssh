@@ -11,6 +11,8 @@ on:  # yamllint disable-line rule:truthy
       - main
     types:
       - checks_requested
+permissions:
+  contents: read
 jobs:
   commit-checks:
     runs-on: ubuntu-latest
@@ -22,39 +24,21 @@ jobs:
       - name: Install conventional-commit linter
         run: npm install @commitlint/config-conventional @commitlint/cli
 
-      # Default config does not allow sentence case
-      # https://github.com/conventional-changelog/commitlint/blob/master/@commitlint/config-conventional/index.js
-      - name: Add conventional commits config and enable sentence case
-        run: |
-          echo "module.exports = {
-            extends: ['@commitlint/config-conventional'],
-            rules: {
-              'subject-case': [
-                2,
-                'never',
-                ['start-case', 'pascal-case', 'upper-case'],
-              ],
-            }
-          }" > commitlint.config.js
-
-      - name: Set commit range variables
-        # Finding the commit range is not as trivial as it may seem.
-        #
-        # At this stage, git's HEAD does not refer to the latest commit in the
-        # PR, but rather to the merge commit inserted by the PR. So instead we
-        # have to get 'HEAD' from the PR event.
-        #
-        # One cannot use the number of commits
-        # (github.event.pull_request.commits) to find the start commit
-        # i.e. HEAD~N does not work, this breaks if there are merge commits.
-        run: |
-          echo "PR_HEAD=${{ github.event.pull_request.head.sha }}" >> $GITHUB_ENV
-          echo "PR_BASE=${{ github.event.pull_request.base.sha }}" >> $GITHUB_ENV
-
+      # Finding the commit range is not as trivial as it may seem.
+      #
+      # At this stage, git's HEAD does not refer to the latest commit in the
+      # PR, but rather to the merge commit inserted by the PR. So instead we
+      # have to get 'HEAD' from the PR event.
+      #
+      # One cannot use the number of commits
+      # (github.event.pull_request.commits) to find the start commit
+      # i.e. HEAD~N does not work, this breaks if there are merge commits.
       - name: Run commitlint on commits
-        run: npx commitlint --from $PR_BASE --to $PR_HEAD --verbose
+        run: >-
+          npx commitlint --from '${{ github.event.pull_request.base.sha }}'
+          --to '${{ github.event.pull_request.head.sha }}' --verbose
 
       - name: Run commitlint on PR title
-        run: |
-          echo ${{ github.event.pull_request.title }} | npx commitlint --verbose
-
+        run: >-
+          echo '${{ github.event.pull_request.title }}' |
+          npx commitlint --verbose

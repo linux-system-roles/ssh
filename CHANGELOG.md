@@ -1,6 +1,15 @@
 Changelog
 =========
 
+[1.1.15] - 2023-04-27
+--------------------
+
+### Other Changes
+
+- ci: Add commitlint GitHub action to ensure conventional commits
+- ci: Remove Debian stretch (9)
+- test: check generated files for ansible_managed, fingerprint
+
 [1.1.14] - 2023-04-13
 --------------------
 

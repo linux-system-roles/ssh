@@ -1,0 +1,56 @@
+---
+- name: Test backups
+  hosts: all
+  vars:
+    __ssh_test_backup_files:
+      - /etc/ssh/ssh_config
+      - /etc/ssh/ssh_config.d/00-ansible.conf
+  tasks:
+    - name: Backup configuration files
+      ansible.builtin.include_tasks: tasks/backup.yml
+
+    - name: Find old backups files
+      ansible.builtin.find:
+        paths: "{{ main_ssh_config_path }}"
+        patterns: "{{ main_ssh_config_name }}.*@*~"
+      register: backup_files
+
+    - name: Remove old backup files
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        state: absent
+      with_items: "{{ backup_files.files }}"
+
+    - name: Configure ssh without creating backup
+      ansible.builtin.include_role:
+        name: linux-system-roles.ssh
+      vars:
+        ssh_backup: false
+
+    - name: Find new backups files
+      ansible.builtin.find:
+        paths: "{{ main_ssh_config_path }}"
+        patterns: "{{ main_ssh_config_name }}.*@*~"
+      register: no_backup
+
+    - name: Configure ssh again with different configuration and with backup
+      ansible.builtin.include_role:
+        name: linux-system-roles.ssh
+      vars:
+        ssh_ForwardX11Trusted: 'yes'  # noqa var-naming
+      register: second_run
+
+    - name: Find new backups files
+      ansible.builtin.find:
+        paths: "{{ main_ssh_config_path }}"
+        patterns: "{{ main_ssh_config_name }}.*@*~"
+      register: new_backup
+
+    - name: Verify backup was not done in first, but in second attempt
+      ansible.builtin.assert:
+        that:
+          - no_backup.files == []
+          - new_backup.files != []
+
+    - name: Restore configuration files
+      ansible.builtin.include_tasks: tasks/restore.yml

@@ -12,7 +12,9 @@
       when:
         - ansible_facts['distribution'] != 'Fedora' and
           not (ansible_facts['distribution'] in ['RedHat','CentOS'] and
-               ansible_facts['distribution_version'] | int >= 8)
+               ansible_facts['distribution_version'] | int >= 8) and
+          not (ansible_facts['distribution'] in ['Ubuntu'] and
+               ansible_facts['distribution_version'] | int >= 20)
 
     - name: Backup configuration files
       include_tasks: tasks/backup.yml

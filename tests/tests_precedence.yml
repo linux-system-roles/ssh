@@ -23,20 +23,10 @@
         ssh_Port: 222
 
     - name: Verify the configuration file was created with right content
-      vars:
-        ssh_config_file: >-
-          {{
-            "/etc/ssh/ssh_config.d/00-ansible.conf"
-            if ansible_facts['distribution'] == 'Fedora' or
-               (ansible_facts['distribution'] in ['RedHat','CentOS'] and
-                ansible_facts['distribution_version'] | int >= 8)
-            else "/etc/ssh/ssh_config"
-          }}
-
       block:
         - name: Download the global configuration file
           slurp:
-            src: "{{ ssh_config_file }}"
+            src: "{{ main_ssh_config }}"
           register: config
 
         - name: Verify the options are in the file

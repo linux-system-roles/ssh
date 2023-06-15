@@ -29,20 +29,10 @@
               Hostname: remote.example.com
 
     - name: Verify the configuration file was created in the right place
-      vars:
-        ssh_config_file: >-
-          {{
-            "/etc/ssh/ssh_config.d/00-ansible.conf"
-            if ansible_facts['distribution'] == 'Fedora' or
-               (ansible_facts['distribution'] in ['RedHat', 'CentOS'] and
-                ansible_facts['distribution_version'] | int >= 8)
-            else "/etc/ssh/ssh_config"
-          }}
-
       block:
         - name: Download the custom configuration file
           slurp:
-            src: "{{ ssh_config_file }}"
+            src: "{{ main_ssh_config }}"
           register: config
 
         - name: Verify the options are in the file

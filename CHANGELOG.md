@@ -1,6 +1,18 @@
 Changelog
 =========
 
+[1.2.0] - 2023-06-23
+--------------------
+
+### New Features
+
+- feat: add ssh_backup option with default true (#91)
+
+### Other Changes
+
+- ci: Add pull request template and run commitlint on PR title only (#99)
+- ci: Rename commitlint to PR title Lint, echo PR titles from env var (#101)
+
 [1.1.16] - 2023-05-26
 --------------------
 

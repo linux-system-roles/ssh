@@ -1,0 +1,50 @@
+---
+- name: Test we can write any other configuration file with system defaults
+  hosts: all
+  tasks:
+    - name: Run role
+      include_role:
+        name: linux-system-roles.ssh
+      vars:
+        ssh:
+          Compression: true
+          GSSAPIAuthentication: false
+          Match:
+            - Condition: user testuser
+              PasswordAuthentication: false
+          Host:
+            - Condition: '*.abc'
+              PubkeyAuthentication: true
+        ssh_config_file: /tmp/ssh_config
+        ssh_skip_defaults: false
+
+    - name: Verify the configuration file was created in the right place
+      block:
+        - name: Download the custom configuration file
+          slurp:
+            src: /tmp/ssh_config
+          register: config
+
+        - name: Verify the options are in the file
+          assert:
+            that:
+              - "'Compression yes' in config.content | b64decode"
+              - "'GSSAPIAuthentication no' in config.content | b64decode"
+
+        - name: Verify EL7 defaults are present
+          when:
+            - ansible_facts['os_family'] == 'RedHat'
+            - ansible_facts['distribution_version'] | int == 7
+          assert:
+            that:
+              - "'Host *' in config.content | b64decode"
+              - "'SendEnv LANG' in config.content | b64decode"
+              - "'GSSAPIAuthentication yes' in config.content | b64decode"
+
+        - name: Verify EL8+ defaults are present
+          when:
+            - ansible_facts['os_family'] == 'RedHat'
+            - ansible_facts['distribution_version'] | int > 7
+          assert:
+            that:
+              - "'Include /etc/ssh/ssh_config.d/' in config.content | b64decode"

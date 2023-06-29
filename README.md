@@ -75,6 +75,9 @@ defined by template `/etc/ssh/ssh_config.d/{name}.conf` if system has drop-in
 directory or `/etc/ssh/ssh_config` otherwise. If `ssh_user!=null`, the
 default is `~/.ssh/config`.
 
+To write `/etc/ssh/ssh_config` even if a drop-in directory is supported, set
+`ssh_drop_in_name` to `null`.
+
 ### ssh_config_owner, ssh_config_group, ssh_config_mode
 
 The owner, group and mode of the created configuration file. The files are

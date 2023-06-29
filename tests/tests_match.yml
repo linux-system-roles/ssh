@@ -1,5 +1,5 @@
 ---
-- name: Verify default packages as well as additional are installed
+- name: Verify Match and Host keywords are rendered as expected
   hosts: all
   gather_facts: true
   vars:
@@ -30,7 +30,7 @@
 
     - name: Verify the configuration file was created in the right place
       block:
-        - name: Download the custom configuration file
+        - name: Download the configuration file
           slurp:
             src: "{{ main_ssh_config }}"
           register: config

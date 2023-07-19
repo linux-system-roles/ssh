@@ -1,6 +1,19 @@
 Changelog
 =========
 
+[1.2.1] - 2023-07-19
+--------------------
+
+### Bug Fixes
+
+- fix: Fix rendering Match/Host defaults when user provides their own (#104)
+- fix: facts being gathered unnecessarily (#106)
+
+### Other Changes
+
+- docs: note on default config in case of drop-in support (#103)
+- ci: ansible-lint - ignore var-naming[no-role-prefix] (#105)
+
 [1.2.0] - 2023-06-23
 --------------------
 

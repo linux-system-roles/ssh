@@ -130,4 +130,4 @@ LGPLv3, see the file LICENSE for more information.
 
 ## Author Information
 
-Jakub Jelen, 2021 - 2022
+Jakub Jelen, 2021 - 2023

@@ -1,6 +1,17 @@
 Changelog
 =========
 
+[1.2.3] - 2023-11-06
+--------------------
+
+### Other Changes
+
+- build(deps): bump actions/checkout from 3 to 4 (#113)
+- ci: ensure dependabot git commit message conforms to commitlint (#116)
+- ci: use dump_packages.py callback to get packages used by role (#118)
+- ci: tox-lsr version 3.1.1 (#120)
+- ci: Fix implicit octal value in main.yml (#121)
+
 [1.2.2] - 2023-09-07
 --------------------
 

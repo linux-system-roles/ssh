@@ -14,7 +14,7 @@
   shell: >
     if test -f {{ item }}; then
       mkdir -p {{ __ssh_test_backup.path }}/$(dirname {{ item }});
-      cp {{ item }} {{ __ssh_test_backup.path }}/$(dirname {{ item }})
+      cp -a {{ item }} {{ __ssh_test_backup.path }}/$(dirname {{ item }})
     fi
   changed_when: false
   loop: "{{ __ssh_test_backup_files | d([]) }}"

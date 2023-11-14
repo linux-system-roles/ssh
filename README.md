@@ -14,6 +14,15 @@ supported by ansible. The role was tested on:
 * Debian
 * Ubuntu
 
+### Collection requirements
+
+In order to manage `rpm-ostree` systems, the role requires modules from external
+collections.  Use the following command to install them:
+
+```bash
+ansible-galaxy collection install -vv -r meta/collection-requirements.yml
+```
+
 ## Role Variables
 
 By default, the role should not modify the system configuration and generate
@@ -121,6 +130,10 @@ somebody. The last line disables X11 forwarding.
 ```
 
 More examples are in the [`examples/`](examples) directory.
+
+## rpm-ostree
+
+See README-ostree.md
 
 ## License
 

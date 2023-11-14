@@ -2,7 +2,7 @@
 - name: Restore backed up files and remove what was not present
   shell: >
     if test -f {{ __ssh_test_backup.path }}/{{ item }}; then
-      cp {{ __ssh_test_backup.path }}/{{ item }} $(dirname {{ item }})
+      cp -a {{ __ssh_test_backup.path }}/{{ item }} $(dirname {{ item }})
     elif test -f {{ item }}; then
       rm {{ item }}
     fi

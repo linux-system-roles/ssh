@@ -7,6 +7,8 @@
       - /etc/ssh/ssh_config.d/00-ansible.conf
       - /etc/ssh/ssh_config
     username: tester123
+    __become_method: "{{ 'su' if ansible_version.full is version('2.10', '<')
+      else 'ansible.builtin.su' }}"
   tasks:
     - name: Backup configuration files
       include_tasks: tasks/backup.yml
@@ -51,7 +53,7 @@
         - name: Stat the .ssh dir
           become: true
           become_user: "{{ username }}"
-          become_method: su
+          become_method: "{{ __become_method }}"
           stat:
             path: "/home/{{ username }}/.ssh"
           register:
@@ -68,7 +70,7 @@
         - name: Make sure the file is readable by user
           become: true
           become_user: "{{ username }}"
-          become_method: su
+          become_method: "{{ __become_method }}"
           stat:
             path: "/home/{{ username }}/.ssh/config"
 
@@ -100,7 +102,7 @@
         - name: Test the effective configuration using ssh
           become: true
           become_user: "{{ username }}"
-          become_method: su
+          become_method: "{{ __become_method }}"
           command: ssh -vvv -G example
           register: effective
           when:

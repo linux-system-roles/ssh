@@ -6,6 +6,8 @@
   package:
     name: "{{ __ssh_packages + ssh_additional_packages }}"
     state: present
+    use: "{{ (__ssh_is_ostree | d(false)) |
+             ternary('ansible.posix.rhel_rpm_ostree', omit) }}"
 
 - name: Gather information about the user for user configuration
   getent:

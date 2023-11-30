@@ -1,6 +1,18 @@
 Changelog
 =========
 
+[1.3.0] - 2023-11-30
+--------------------
+
+### New Features
+
+- feat: support for ostree systems (#124)
+
+### Other Changes
+
+- ci: fix ansible-lint issue in tests_user_config.yml (#125)
+- tests: Ensure backup/restore preserves file attributes (#126)
+
 [1.2.3] - 2023-11-06
 --------------------
 

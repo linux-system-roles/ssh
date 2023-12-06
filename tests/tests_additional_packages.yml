@@ -26,4 +26,4 @@
     - name: Verify the packages were installed
       assert:
         that:
-          - "'{{ additional_package | trim }}' in ansible_facts.packages"
+          - "additional_package | trim in ansible_facts.packages"

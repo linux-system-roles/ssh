@@ -37,5 +37,5 @@
     - name: Check if the selected options are in
       assert:
         that:
-          - "'{{ __ssh_test_option | trim }}' in config.content | b64decode"
+          - "__ssh_test_option | trim in config.content | b64decode"
           - "'LocalForward 2222 localhost:22' in config.content | b64decode"

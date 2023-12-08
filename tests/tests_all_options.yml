@@ -85,6 +85,6 @@
     - name: Verify the options are in the file
       assert:
         that:
-          - "item ~ ' yes' in config.content | b64decode "
+          - item ~ ' yes' in config.content | b64decode
       loop:
         "{{ ssh_options.stdout_lines }}"

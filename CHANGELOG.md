@@ -1,6 +1,19 @@
 Changelog
 =========
 
+[1.3.1] - 2023-12-12
+--------------------
+
+### Bug Fixes
+
+- fix: Fix warning for using jinja templates in assert (#131)
+
+### Other Changes
+
+- ci: Add ALP-Dolomite var file (#123)
+- ci: bump actions/github-script from 6 to 7 (#129)
+- refactor: get_ostree_data.sh use env shebang - remove from .sanity* (#130)
+
 [1.3.0] - 2023-11-30
 --------------------
 

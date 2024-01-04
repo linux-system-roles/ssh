@@ -1,5 +1,5 @@
 ---
-- name: Test role variable override
+- name: Test role include variable override
   hosts: all
   gather_facts: true
   tasks:
@@ -13,7 +13,7 @@
         # XXX ugly, self-modifying code - changes the "caller" role on
         # the controller
         dest: "{{ playbook_dir }}/roles/caller/vars/{{ item }}.yml"
-        mode: 0600
+        mode: preserve
       loop: "{{ varfiles | unique }}"
       # In case the playbook is executed against multiple hosts, use
       # only the first one. Otherwise the hosts would stomp on each
@@ -38,9 +38,18 @@
         varfiles: "{{ [facts['distribution']] | product(separators) |
           map('join') | product(versions) | map('join') | list +
           [facts['distribution'], facts['os_family']] }}"
+      register: __varfiles_created
 
-    - name: Call caller role
+    - name: Import role
       import_role:
         name: caller
       vars:
         roletoinclude: linux-system-roles.ssh
+
+    - name: Cleanup
+      file:
+        path: "{{ item.dest }}"
+        state: absent
+      loop: "{{ __varfiles_created.results }}"
+      delegate_to: localhost
+      when: inventory_hostname == ansible_play_hosts_all[0]

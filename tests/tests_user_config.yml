@@ -42,7 +42,7 @@
     - name: Verify the configuration file was created with right content
       vars:
         ssh_test_config_file:
-          "{{ getent_passwd[username][4] }}/.ssh/config"
+          "{{ ansible_facts['getent_passwd'][username][4] }}/.ssh/config"
 
       block:
         - name: Download the created configuration file

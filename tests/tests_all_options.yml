@@ -4,6 +4,8 @@
   gather_facts: true
   vars:
     ssh_c: {}
+    pkg_mgr: "{{ (ansible_facts['distribution_version'] | int > 7) |
+      ternary('dnf', 'yum') }}"
   tasks:
     - name: Ubuntu and RHEL6 containers are minified, missing manual pages
       meta: end_host
@@ -34,6 +36,23 @@
           set_fact:
             __ssh_is_ostree: "{{ __ostree_booted_stat.stat.exists }}"
 
+    - name: Enable installation of manual pages on Fedora/RHEL
+      ansible.builtin.lineinfile:
+        line: tsflags=nodocs
+        path: "{{ '/etc/dnf/dnf.conf'
+          if ansible_facts['distribution_version'] | int > 7
+          else '/etc/yum.conf' }}"
+        state: absent
+      when:
+        - ansible_facts['os_family'] == "RedHat"
+
+    - name: Reinstall manual pages for openssh-clients on RHEL
+      ansible.builtin.command: "{{ pkg_mgr }} reinstall -y openssh-clients"
+      when:
+        - ansible_facts['os_family'] == "RedHat"
+        - not __ssh_is_ostree | bool
+      changed_when: true
+
     - name: Make sure manual pages and bash are installed
       package:
         name:
@@ -48,10 +67,11 @@
     - name: Get list of options from manual page
       shell: >-
         set -o pipefail && man ssh_config \
-          | grep -o '^     [A-Z][A-Za-z0-9]*\(.\|  \)' \
+          | grep -o '^\(     \|       \)[A-Z][A-Za-z0-9]*\(.\|  \)' \
           | grep -v "[A-Za-z0-9] $" | grep -v "[^A-Za-z0-9 ]$" \
           | awk '{ print $1 }' \
-          | grep -v '^$' | grep -v "^Host$" | grep -v "^Match$"
+          | grep -v '^$' | grep -v \
+          "^\(Match\|Host\|OpenSSH\|The\|\Theo\|Unless\|Since\|Arguments\)$"
       args:
         executable: /bin/bash
 

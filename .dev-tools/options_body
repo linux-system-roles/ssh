@@ -23,6 +23,7 @@ ControlMaster
 ControlPath
 ControlPersist
 DynamicForward
+EnableEscapeCommandline
 EnableSSHKeysign
 EscapeChar
 ExitOnForwardFailure

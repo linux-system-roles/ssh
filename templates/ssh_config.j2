@@ -62,6 +62,7 @@ Match {{ match["Condition"] }}
 {{       render_option("ControlPath", match["ControlPath"], true) -}}
 {{       render_option("ControlPersist", match["ControlPersist"], true) -}}
 {{       render_option("DynamicForward", match["DynamicForward"], true) -}}
+{{       render_option("EnableEscapeCommandline", match["EnableEscapeCommandline"], true) -}}
 {{       render_option("EnableSSHKeysign", match["EnableSSHKeysign"], true) -}}
 {{       render_option("EscapeChar", match["EscapeChar"], true) -}}
 {{       render_option("ExitOnForwardFailure", match["ExitOnForwardFailure"], true) -}}
@@ -184,6 +185,7 @@ Host {{ host["Condition"] }}
 {{       render_option("ControlPath", host["ControlPath"], true) -}}
 {{       render_option("ControlPersist", host["ControlPersist"], true) -}}
 {{       render_option("DynamicForward", host["DynamicForward"], true) -}}
+{{       render_option("EnableEscapeCommandline", host["EnableEscapeCommandline"], true) -}}
 {{       render_option("EnableSSHKeysign", host["EnableSSHKeysign"], true) -}}
 {{       render_option("EscapeChar", host["EscapeChar"], true) -}}
 {{       render_option("ExitOnForwardFailure", host["ExitOnForwardFailure"], true) -}}
@@ -299,6 +301,7 @@ Host {{ host["Condition"] }}
 {{ body_option("ControlPath", ssh_ControlPath) -}}
 {{ body_option("ControlPersist", ssh_ControlPersist) -}}
 {{ body_option("DynamicForward", ssh_DynamicForward) -}}
+{{ body_option("EnableEscapeCommandline", ssh_EnableEscapeCommandline) -}}
 {{ body_option("EnableSSHKeysign", ssh_EnableSSHKeysign) -}}
 {{ body_option("EscapeChar", ssh_EscapeChar) -}}
 {{ body_option("ExitOnForwardFailure", ssh_ExitOnForwardFailure) -}}

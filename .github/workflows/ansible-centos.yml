@@ -1,0 +1,46 @@
+---
+name: Run Ansible Check on CentOS
+
+on: [push, pull_request]
+
+jobs:
+  centos-7:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout PR
+        uses: actions/checkout@v4
+
+      - run: "sed -i -e 's/ansible.posix.//g' */*.yml */*/*.yml"
+
+      - name: ansible check with centos 7
+        uses: roles-ansible/check-ansible-centos-centos7-action@master
+        with:
+          group: local
+          hosts: localhost
+          targets: "tests/tests_*.yml"
+
+  centos-8:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout PR
+        uses: actions/checkout@v4
+
+      - name: ansible check with centos 8
+        uses: roles-ansible/check-ansible-centos-centos8-action@master
+        with:
+          group: local
+          hosts: localhost
+          targets: "tests/tests_*.yml"
+
+  centos-9:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout PR
+        uses: actions/checkout@v4
+
+      - name: ansible check with centos 9
+        uses: roles-ansible/check-ansible-centos-centos9-action@main
+        with:
+          group: local
+          hosts: localhost
+          targets: "tests/tests_*.yml"

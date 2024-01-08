@@ -63,8 +63,8 @@
           assert:
             that:
               - ssh_dir_mode.stat.exists
-              - "ssh_dir_mode.stat.pw_name == '{{ username }}'"
-              - "ssh_dir_mode.stat.gr_name == '{{ username }}'"
+              - ssh_dir_mode.stat.pw_name == username
+              - ssh_dir_mode.stat.gr_name == username
               - ssh_dir_mode.stat.mode == '0700'
 
         - name: Make sure the file is readable by user
@@ -95,8 +95,8 @@
           assert:
             that:
               - config_mode.stat.exists
-              - "config_mode.stat.pw_name == '{{ username }}'"
-              - "config_mode.stat.gr_name == '{{ username }}'"
+              - config_mode.stat.pw_name == username
+              - config_mode.stat.gr_name == username
               - config_mode.stat.mode == '0600'
 
         - name: Test the effective configuration using ssh

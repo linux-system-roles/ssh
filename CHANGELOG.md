@@ -1,6 +1,15 @@
 Changelog
 =========
 
+[1.3.2] - 2024-01-16
+--------------------
+
+### Other Changes
+
+- ci: support ansible-lint and ansible-test 2.16 (#133)
+- ci: Use supported ansible-lint action; run ansible-lint against the collection (#134)
+- ci: Run Fedora/CentOS CI in GH Actions + unbreak debian buster CI run (#135)
+
 [1.3.1] - 2023-12-12
 --------------------
 

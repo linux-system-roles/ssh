@@ -50,6 +50,7 @@ Match {{ match["Condition"] }}
 {{       render_option("CASignatureAlgorithms", match["CASignatureAlgorithms"], true) -}}
 {{       render_option("CertificateFile", match["CertificateFile"], true) -}}
 {{       render_option("ChallengeResponseAuthentication", match["ChallengeResponseAuthentication"], true) -}}
+{{       render_option("ChannelTimeout", match["ChannelTimeout"], true) -}}
 {{       render_option("CheckHostIP", match["CheckHostIP"], true) -}}
 {{       render_option("Cipher", match["Cipher"], true) -}}
 {{       render_option("Ciphers", match["Ciphers"], true) -}}
@@ -107,6 +108,7 @@ Match {{ match["Condition"] }}
 {{       render_option("MACs", match["MACs"], true) -}}
 {{       render_option("NoHostAuthenticationForLocalhost", match["NoHostAuthenticationForLocalhost"], true) -}}
 {{       render_option("NumberOfPasswordPrompts", match["NumberOfPasswordPrompts"], true) -}}
+{{       render_option("ObscureKeystrokeTiming", match["ObscureKeystrokeTiming"], true) -}}
 {{       render_option("PasswordAuthentication", match["PasswordAuthentication"], true) -}}
 {{       render_option("PermitLocalCommand", match["PermitLocalCommand"], true) -}}
 {{       render_option("PermitRemoteOpen", match["PermitRemoteOpen"], true) -}}
@@ -173,6 +175,7 @@ Host {{ host["Condition"] }}
 {{       render_option("CASignatureAlgorithms", host["CASignatureAlgorithms"], true) -}}
 {{       render_option("CertificateFile", host["CertificateFile"], true) -}}
 {{       render_option("ChallengeResponseAuthentication", host["ChallengeResponseAuthentication"], true) -}}
+{{       render_option("ChannelTimeout", host["ChannelTimeout"], true) -}}
 {{       render_option("CheckHostIP", host["CheckHostIP"], true) -}}
 {{       render_option("Cipher", host["Cipher"], true) -}}
 {{       render_option("Ciphers", host["Ciphers"], true) -}}
@@ -230,6 +233,7 @@ Host {{ host["Condition"] }}
 {{       render_option("MACs", host["MACs"], true) -}}
 {{       render_option("NoHostAuthenticationForLocalhost", host["NoHostAuthenticationForLocalhost"], true) -}}
 {{       render_option("NumberOfPasswordPrompts", host["NumberOfPasswordPrompts"], true) -}}
+{{       render_option("ObscureKeystrokeTiming", host["ObscureKeystrokeTiming"], true) -}}
 {{       render_option("PasswordAuthentication", host["PasswordAuthentication"], true) -}}
 {{       render_option("PermitLocalCommand", host["PermitLocalCommand"], true) -}}
 {{       render_option("PermitRemoteOpen", host["PermitRemoteOpen"], true) -}}
@@ -289,6 +293,7 @@ Host {{ host["Condition"] }}
 {{ body_option("CASignatureAlgorithms", ssh_CASignatureAlgorithms) -}}
 {{ body_option("CertificateFile", ssh_CertificateFile) -}}
 {{ body_option("ChallengeResponseAuthentication", ssh_ChallengeResponseAuthentication) -}}
+{{ body_option("ChannelTimeout", ssh_ChannelTimeout) -}}
 {{ body_option("CheckHostIP", ssh_CheckHostIP) -}}
 {{ body_option("Cipher", ssh_Cipher) -}}
 {{ body_option("Ciphers", ssh_Ciphers) -}}
@@ -346,6 +351,7 @@ Host {{ host["Condition"] }}
 {{ body_option("MACs", ssh_MACs) -}}
 {{ body_option("NoHostAuthenticationForLocalhost", ssh_NoHostAuthenticationForLocalhost) -}}
 {{ body_option("NumberOfPasswordPrompts", ssh_NumberOfPasswordPrompts) -}}
+{{ body_option("ObscureKeystrokeTiming", ssh_ObscureKeystrokeTiming) -}}
 {{ body_option("PasswordAuthentication", ssh_PasswordAuthentication) -}}
 {{ body_option("PermitLocalCommand", ssh_PermitLocalCommand) -}}
 {{ body_option("PermitRemoteOpen", ssh_PermitRemoteOpen) -}}

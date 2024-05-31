@@ -71,7 +71,7 @@
           | grep -v "[A-Za-z0-9] $" | grep -v "[^A-Za-z0-9 ]$" \
           | awk '{ print $1 }' \
           | grep -v '^$' | grep -v \
-          "^\(Match\|Host\|OpenSSH\|The\|\Theo\|Unless\|Since\|Arguments\)$"
+          "^\(A\|Match\|Host\|OpenSSH\|The\|\Theo\|Tatu\|Unless\|Since\|Arguments\|Note\|Tag\)$"
       args:
         executable: /bin/bash
 

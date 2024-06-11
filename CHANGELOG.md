@@ -1,6 +1,19 @@
 Changelog
 =========
 
+[1.4.0] - 2024-06-11
+--------------------
+
+### New Features
+
+- feat: Add new configuration options and remove false positives in the test (#142)
+
+### Other Changes
+
+- ci: use tox-lsr 3.3.0 which uses ansible-test 2.17 (#141)
+- ci: tox-lsr 3.4.0 - fix py27 tests; move other checks to py310 (#144)
+- ci: Add supported_ansible_also to .ansible-lint (#145)
+
 [1.3.3] - 2024-04-04
 --------------------
 

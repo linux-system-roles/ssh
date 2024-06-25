@@ -17,26 +17,40 @@ galaxy_info:
         - all
     - name: Debian
       versions:
-        - wheezy
-        - jessie
-        - stretch
-        - buster
+        - "wheezy"
+        - "jessie"
+        - "stretch"
+        - "buster"
     - name: Ubuntu
       versions:
-        - precise
-        - trusty
-        - xenial
-        - bionic
-        - focal
-        - jammy
+        - "precise"
+        - "trusty"
+        - "xenial"
+        - "bionic"
+        - "focal"
+        - "jammy"
   galaxy_tags:
-    - networking
-    - system
-    - ssh
-    - client
-    - openssh
-    - ubuntu
-    - debian
     - centos
+    - client
+    - debianbuster
+    - debianjessie
+    - debianstretch
+    - debianwheezy
+    - el6
+    - el7
+    - el8
+    - el9
+    - el10
+    - fedora
+    - networking
+    - openssh
     - redhat
+    - ssh
+    - system
+    - ubuntubionic
+    - ubuntufocal
+    - ubuntujammy
+    - ubuntuprecise
+    - ubuntutrusty
+    - ubuntuxenial
 dependencies: []

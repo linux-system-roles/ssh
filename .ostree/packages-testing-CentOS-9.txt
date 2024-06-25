@@ -1,3 +1,1 @@
-bash
-man-db
-openssh-keycat
+packages-testing-RedHat-9.txt

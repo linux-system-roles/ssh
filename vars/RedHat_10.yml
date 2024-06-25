@@ -1,0 +1,8 @@
+---
+# This system supports drop in directory so defaults are adjusted
+__ssh_supports_drop_in: true
+__ssh_drop_in_name: "00-ansible"
+
+# This default lists the main configuration file defaults
+__ssh_defaults:
+  Include: /etc/ssh/ssh_config.d/*.conf

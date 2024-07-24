@@ -28,7 +28,8 @@
     - name: Fail if reboot is needed and not set
       fail:
         msg: >
-          Reboot is required but not allowed. Please set 'ssh_transactional_update_reboot_ok' to proceed.
+          Reboot is required but not allowed. Please set
+          'ssh_transactional_update_reboot_ok' to proceed.
       when:
         - ssh_transactional_update_reboot_ok is none
 

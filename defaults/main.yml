@@ -26,3 +26,6 @@ ssh_config_file: null
 
 # create backup of ssh_config
 ssh_backup: true
+
+# var to manage reboots for transactional update systems
+ssh_transactional_update_reboot_ok: null

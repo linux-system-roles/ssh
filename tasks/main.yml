@@ -8,6 +8,29 @@
     state: present
     use: "{{ (__ssh_is_ostree | d(false)) |
              ternary('ansible.posix.rhel_rpm_ostree', omit) }}"
+  register: ssh_package_result
+
+- name: Handle reboot for transactional update systems
+  when:
+    - __ssh_is_transactional | d(false)
+    - ssh_package_result is changed
+  block:
+    - name: Notify user that reboot is needed to apply changes
+      debug:
+        msg: >
+          Reboot required to apply changes due to transactional updates.
+
+    - name: Reboot transactional update systems
+      reboot:
+        msg: Rebooting the system to apply transactional update changes.
+      when: ssh_transactional_update_reboot_ok | bool
+
+    - name: Fail if reboot is needed and not set
+      fail:
+        msg: >
+          Reboot is required but not allowed. Please set 'ssh_transactional_update_reboot_ok' to proceed.
+      when:
+        - ssh_transactional_update_reboot_ok is none
 
 - name: Gather information about the user for user configuration
   getent:

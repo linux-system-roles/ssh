@@ -59,7 +59,7 @@ SOFTWARE.
   <style type="text/css">code{white-space: pre;}</style>
   <style type="text/css">
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -70,7 +70,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -156,6 +156,8 @@ id="toc-ssh_config_file">ssh_config_file</a></li>
 id="toc-ssh_config_owner-ssh_config_group-ssh_config_mode">ssh_config_owner,
 ssh_config_group, ssh_config_mode</a></li>
 <li><a href="#ssh_backup" id="toc-ssh_backup">ssh_backup</a></li>
+<li><a href="#ssh_transactional_update_reboot_ok"
+id="toc-ssh_transactional_update_reboot_ok">ssh_transactional_update_reboot_ok</a></li>
 </ul></li>
 <li><a href="#example-playbook" id="toc-example-playbook">Example
 Playbook</a></li>
@@ -245,6 +247,15 @@ default, unless <code>ssh_user!=null</code>. In that case, the mode is
 <h2 id="ssh_backup">ssh_backup</h2>
 <p>When set to <em>false</em>, the original <code>ssh_config</code> file
 is not backed up. Default is <em>true</em>.</p>
+<h2
+id="ssh_transactional_update_reboot_ok">ssh_transactional_update_reboot_ok</h2>
+<p>This variable is used to handle reboots required by transactional
+updates. If a transactional update requires a reboot, the role will
+proceed with the reboot if ssh_transactional_update_reboot_ok is set to
+true. If set to false, the role will notify the user that a reboot is
+required, allowing for custom handling of the reboot requirement. If
+this variable is not set, the role will fail to ensure the reboot
+requirement is not overlooked.</p>
 <h1 id="example-playbook">Example Playbook</h1>
 <p>The following playbook configures the <code>root</code> user ssh
 configuration in his</p>

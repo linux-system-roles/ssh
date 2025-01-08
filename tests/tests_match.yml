@@ -19,7 +19,7 @@
         ssh:
           Match:
             - Condition: user testuser
-              Compression: true
+              LogLevel: DEBUG2
             - Condition: host example
               Hostname: example.com
           Host:
@@ -39,7 +39,7 @@
           assert:
             that:
               - "'Match user testuser' in config.content | b64decode"
-              - "'Compression yes' in config.content | b64decode"
+              - "'LogLevel DEBUG2' in config.content | b64decode"
               - "'Match host example' in config.content | b64decode"
               - "'Hostname example.com' in config.content | b64decode"
               - "'Host local' in config.content | b64decode"
@@ -70,9 +70,9 @@
         - name: Verify the options are correctly evaluated
           assert:
             that:
-              - "'compression yes' in test1.stdout"
-              - "'compression yes' not in test2.stdout"
-              - "'compression yes' not in test3.stdout"
+              - "'loglevel DEBUG2' in test1.stdout"
+              - "'loglevel DEBUG2' not in test2.stdout"
+              - "'loglevel DEBUG2' not in test3.stdout"
               - "'hostname example.com' in test1.stdout"
               - "'hostname example.com' not in test2.stdout"
               - "'hostname example.com' not in test3.stdout"

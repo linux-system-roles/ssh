@@ -9,7 +9,7 @@ An Ansible role for managing ssh clients configuration.
 This role should work on any system that provides openssh client and is
 supported by ansible. The role was tested on:
 
-* RHEL/CentOS 6, 7, 8, 9
+* RHEL/CentOS 6, 7, 8, 9, 10
 * Fedora
 * Debian
 * Ubuntu

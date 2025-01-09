@@ -1,6 +1,18 @@
 Changelog
 =========
 
+[1.5.2] - 2025-01-09
+--------------------
+
+### Bug Fixes
+
+- fix: Workaround for CentOS 10 issues in openssh (#167)
+
+### Other Changes
+
+- ci: Use Fedora 41, drop Fedora 39 (#165)
+- ci: Use Fedora 41, drop Fedora 39 - part two (#166)
+
 [1.5.1] - 2024-10-30
 --------------------
 

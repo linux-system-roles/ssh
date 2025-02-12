@@ -13,7 +13,7 @@ ssh_drop_in_name: "{{ __ssh_drop_in_name }}"
 ssh: []
 
 # list of additional packages to install
-# for exmaple openssh-keycat or openssh-askpass
+# for example openssh-keycat or openssh-askpass
 ssh_additional_packages: []
 
 # the override values for the owner, group and mode of configuration file

@@ -1,6 +1,22 @@
 Changelog
 =========
 
+[1.5.3] - 2025-04-23
+--------------------
+
+### Other Changes
+
+- ci: ansible-plugin-scan is disabled for now (#169)
+- ci: bump ansible-lint to v25; provide collection requirements for ansible-lint (#172)
+- ci: Check spelling with codespell (#173)
+- ci: Add test plan that runs CI tests and customize it for each role (#174)
+- ci: In test plans, prefix all relate variables with SR_ (#175)
+- ci: Fix bug with ARTIFACTS_URL after prefixing with SR_ (#176)
+- ci: several changes related to new qemu test, ansible-lint, python versions, ubuntu versions (#177)
+- ci: use tox-lsr 3.6.0; improve qemu test logging (#178)
+- tests: Add missing dependency on Fedora 42 (#179)
+- ci: skip storage scsi, nvme tests in github qemu ci (#180)
+
 [1.5.2] - 2025-01-09
 --------------------
 

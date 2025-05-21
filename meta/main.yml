@@ -53,4 +53,6 @@ galaxy_info:
     - ubuntuprecise
     - ubuntutrusty
     - ubuntuxenial
+    - container
+    - containerbuild
 dependencies: []

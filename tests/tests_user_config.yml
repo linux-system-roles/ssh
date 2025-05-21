@@ -100,10 +100,9 @@
               - config_mode.stat.mode == '0600'
 
         - name: Test the effective configuration using ssh
-          become: true
-          become_user: "{{ username }}"
-          become_method: "{{ __become_method }}"
-          command: ssh -vvv -G example
+          # don't use become_user, does not work in containers due to
+          # https://github.com/linux-system-roles/tox-lsr/pull/191
+          command: "su -c 'ssh -vvv -G example' {{ username }}"
           register: effective
           when:
             - ansible_facts['distribution'] not in ['CentOS', 'RedHat'] or

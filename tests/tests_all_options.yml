@@ -94,13 +94,20 @@
         name: linux-system-roles.ssh
       vars:
         __ssh_supports_validate: false
-        ssh_config_file: /tmp/ssh_config
+        ssh_config_file: /etc/test_ssh_config
         ssh:
           "{{ ssh_c }}"
+      when: not __bootc_validation | d(false)
+
+    - name: Create QEMU deployment during bootc end-to-end test
+      delegate_to: localhost
+      command: "{{ lsr_scriptdir }}/bootc-buildah-qcow.sh {{ ansible_host }}"
+      changed_when: true
+      when: ansible_connection == "buildah"
 
     - name: Download the configuration file
       slurp:
-        src: /tmp/ssh_config
+        src: /etc/test_ssh_config
       register: config
 
     - name: Verify the options are in the file

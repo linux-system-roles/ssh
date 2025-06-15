@@ -3,8 +3,8 @@
   hosts: all
   vars:
     __ssh_test_backup_files:
-      - /etc/ssh_config.d/00-ansible.conf
-      - /etc/ssh_config
+      - /etc/ssh/ssh_config.d/00-ansible.conf
+      - /etc/ssh/ssh_config
   tasks:
     - name: Backup configuration files
       include_tasks: tasks/backup.yml
@@ -19,8 +19,8 @@
   hosts: all
   vars:
     __ssh_test_backup_files:
-      - /etc/ssh_config.d/00-ansible.conf
-      - /etc/ssh_config
+      - /etc/ssh/ssh_config.d/00-ansible.conf
+      - /etc/ssh/ssh_config
   tasks:
     - name: Restore configuration files
       include_tasks: tasks/restore.yml

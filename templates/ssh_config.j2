@@ -16,7 +16,7 @@
 {%         if i is none %}
 {{- '' -}}
 {%         else %}
-{%         if indent %}  {% endif %}
+{%           if indent %}  {% endif %}
 {{ key }} {{ i | string }}
 {%         endif %}
 {%       endfor %}
@@ -27,11 +27,11 @@
 {% endmacro %}
 {% macro body_option(key, override) %}
 {%   if override is defined and override is not none %}
-{{ render_option(key, override) -}}
+{{     render_option(key, override) -}}
 {%   elif ssh[key] is defined and ssh[key] is not none %}
-{{ render_option(key, ssh[key]) -}}
+{{     render_option(key, ssh[key]) -}}
 {%   elif __ssh_defaults[key] is defined and not __ssh_skip_defaults | trim | bool %}
-{{ render_option(key, __ssh_defaults[key]) -}}
+{{     render_option(key, __ssh_defaults[key]) -}}
 {%   else %}
 {{- '' -}}
 {%   endif %}

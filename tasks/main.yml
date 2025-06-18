@@ -58,61 +58,24 @@
     owner: "{{ __ssh_config_owner | trim }}"
     group: "{{ __ssh_config_group | trim }}"
     mode: "{{ __ssh_config_mode | trim }}"
-    validate: >-
-      {% if __ssh_supports_validate %}
-        ssh -G -F %s example.com
-      {% else %}
-        true %s
-      {% endif %}
+    validate: "{{ __ssh_supports_validate | ternary('ssh -G -F %s example.com', 'true %s') }}"
     backup: "{{ ssh_backup }}"
   vars:
-    __ssh_skip_defaults: >-
-      {% if ssh_skip_defaults != 'auto' %}
-        {{ ssh_skip_defaults }}
-      {% elif ssh_user is not none %}
-        true
-      {% else %}
-        {% if ssh_drop_in_name is not none and __ssh_supports_drop_in %}
-          true
-        {% else %}
-          false
-        {% endif %}
-      {% endif %}
-    __ssh_config_file: >-
-      {% if ssh_config_file is not none %}
-        {{ ssh_config_file }}
-      {% elif ssh_user is not none and
-         ansible_facts['getent_passwd'] is defined %}
-        {{ ansible_facts['getent_passwd'][ssh_user][4] }}/.ssh/config
-      {% else %}
-        {% if ssh_drop_in_name is not none and __ssh_supports_drop_in %}
-          {{ __ssh_drop_in_template | replace("{name}", ssh_drop_in_name) }}
-        {% else %}
-          /etc/ssh/ssh_config
-        {% endif %}
-      {% endif %}
-    __ssh_config_owner: >-
-      {% if ssh_config_owner is not none %}
-        {{ ssh_config_owner }}
-      {% elif ssh_user is not none %}
-        {{ ssh_user }}
-      {% else %}
-        root
-      {% endif %}
-    __ssh_config_group: >-
-      {% if ssh_config_group is not none %}
-        {{ ssh_config_group }}
-      {% elif ssh_user is not none and
-         ansible_facts['getent_passwd'] is defined %}
-        {{ ssh_user }}
-      {% else %}
-        root
-      {% endif %}
-    __ssh_config_mode: >-
-      {% if ssh_config_mode is not none %}
-        {{ ssh_config_mode }}
-      {% elif ssh_user is not none %}
-        600
-      {% else %}
-        644
-      {% endif %}
+    __ssh_skip_defaults: "{{ ssh_skip_defaults if ssh_skip_defaults != 'auto'
+      else (ssh_user is not none) or
+           (ssh_drop_in_name is not none and __ssh_supports_drop_in) }}"
+    __ssh_config_file: "{{ ssh_config_file if ssh_config_file is not none
+      else ansible_facts['getent_passwd'][ssh_user][4] ~ '/.ssh/config'
+        if ssh_user is not none and ansible_facts['getent_passwd'] is defined
+      else __ssh_drop_in_template | replace('{name}', ssh_drop_in_name)
+        if ssh_drop_in_name is not none and __ssh_supports_drop_in
+      else '/etc/ssh/ssh_config' }}"
+    __ssh_config_owner: "{{ ssh_config_owner if ssh_config_owner is not none
+      else ssh_user if ssh_user is not none
+      else 'root' }}"
+    __ssh_config_group: "{{ ssh_config_group if ssh_config_group is not none
+      else ssh_user if ssh_user is not none and ansible_facts['getent_passwd'] is defined
+      else 'root' }}"
+    __ssh_config_mode: "{{ ssh_config_mode if ssh_config_mode is not none
+      else '0600' if ssh_user is not none
+      else '0644' }}"

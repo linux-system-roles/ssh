@@ -40,7 +40,7 @@
         ssh_ForwardX11Trusted: 'yes'  # noqa var-naming
       register: second_run
 
-    - name: Find new backups files
+    - name: Find new backups files again
       ansible.builtin.find:
         paths: "{{ main_ssh_config_path }}"
         patterns: "{{ main_ssh_config_name }}.*@*~"

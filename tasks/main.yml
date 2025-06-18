@@ -64,12 +64,15 @@
     __ssh_skip_defaults: "{{ ssh_skip_defaults if ssh_skip_defaults != 'auto'
       else (ssh_user is not none) or
            (ssh_drop_in_name is not none and __ssh_supports_drop_in) }}"
-    __ssh_config_file: "{{ ssh_config_file if ssh_config_file is not none
-      else ansible_facts['getent_passwd'][ssh_user][4] ~ '/.ssh/config'
-        if ssh_user is not none and ansible_facts['getent_passwd'] is defined
-      else __ssh_drop_in_template | replace('{name}', ssh_drop_in_name)
-        if ssh_drop_in_name is not none and __ssh_supports_drop_in
-      else '/etc/ssh/ssh_config' }}"
+    __ssh_config_file: "{{ ssh_config_file
+      if ssh_config_file is not none
+      else
+        ansible_facts['getent_passwd'][ssh_user][4] ~ '/.ssh/config'
+          if ssh_user is not none and ansible_facts['getent_passwd'] is defined
+          else
+            __ssh_drop_in_template | replace('{name}', ssh_drop_in_name)
+              if ssh_drop_in_name is not none and __ssh_supports_drop_in
+              else '/etc/ssh/ssh_config' }}"
     __ssh_config_owner: "{{ ssh_config_owner if ssh_config_owner is not none
       else ssh_user if ssh_user is not none
       else 'root' }}"

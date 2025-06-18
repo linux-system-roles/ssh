@@ -1,7 +1,7 @@
 {{ ansible_managed | comment }}
 {{ "system_role:ssh" | comment(prefix="", postfix="") }}
 {% macro render_option(key, value, indent=false) %}
-{%   if value is defined %}
+{%   if value is defined and value is not none %}
 {%     if value is sameas true %}
 {%       if indent %}  {% endif %}
 {{ key }} yes
@@ -13,22 +13,28 @@
 {{ key }} {{ value | string }}
 {%     else %}
 {%       for i in value %}
+{%         if i is none %}
+{{- '' -}}
+{%         else %}
 {%         if indent %}  {% endif %}
 {{ key }} {{ i | string }}
+{%         endif %}
 {%       endfor %}
 {%     endif %}
+{%   else %}
+{{- '' -}}
 {%   endif %}
 {% endmacro %}
 {% macro body_option(key, override) %}
-{%   set value = undefined %}
-{%   if override is defined %}
-{%     set value = override %}
-{%   elif ssh[key] is defined %}
-{%     set value = ssh[key] %}
+{%   if override is defined and override is not none %}
+{{ render_option(key, override) -}}
+{%   elif ssh[key] is defined and ssh[key] is not none %}
+{{ render_option(key, ssh[key]) -}}
 {%   elif __ssh_defaults[key] is defined and not __ssh_skip_defaults | trim | bool %}
-{%     set value = __ssh_defaults[key] %}
+{{ render_option(key, __ssh_defaults[key]) -}}
+{%   else %}
+{{- '' -}}
 {%   endif %}
-{{ render_option(key, value) -}}
 {% endmacro %}
 {% macro match_block(match_list) %}
 {%   if match_list["Condition"] is defined %}

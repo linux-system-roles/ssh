@@ -1,6 +1,27 @@
 Changelog
 =========
 
+[1.6.0] - 2025-06-23
+--------------------
+
+### New Features
+
+- feat: Support this role in container environments and builds (#185)
+
+### Bug Fixes
+
+- fix: Avoid setting ansible_managed variable (#189)
+
+### Other Changes
+
+- ci: Bump sclorg/testing-farm-as-github-action from 3 to 4 (#182)
+- ci: bump tox-lsr to 3.8.0; rename qemu/kvm tests (#183)
+- ci: Add Fedora 42; use tox-lsr 3.9.0; use lsr-report-errors for qemu tests (#184)
+- ci: Add support for bootc end-to-end validation tests (#186)
+- tests: Update tests_all_options.yml to do bootc end-to-end validation (#187)
+- ci: Use ansible 2.19 for fedora 42 testing; support python 3.13 (#188)
+- refactor: Ansible 2.19 support (#191)
+
 [1.5.3] - 2025-04-23
 --------------------
 

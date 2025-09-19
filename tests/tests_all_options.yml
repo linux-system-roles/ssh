@@ -43,12 +43,14 @@
           if ansible_facts['distribution_version'] | int > 7
           else '/etc/yum.conf' }}"
         state: absent
+      register: __ssh_nodocs
       when:
         - ansible_facts['os_family'] == "RedHat"
 
     - name: Reinstall manual pages for openssh-clients on RHEL
       ansible.builtin.command: "{{ pkg_mgr }} reinstall -y openssh-clients"
       when:
+        - __ssh_nodocs is changed
         - ansible_facts['os_family'] == "RedHat"
         - not __ssh_is_ostree | bool
       changed_when: true

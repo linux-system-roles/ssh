@@ -1,6 +1,21 @@
 Changelog
 =========
 
+[1.6.1] - 2025-10-21
+--------------------
+
+### Other Changes
+
+- ci: Bump actions/checkout from 4 to 5 (#193)
+- ci: rollout several recent changes to CI testing (#195)
+- ci: support openSUSE Leap in qemu/kvm test matrix (#196)
+- ci: use the new epel feature to enable EPEL for testing farm (#197)
+- ci: fix markdown formatting for contributing.md to pass markdownlint (#199)
+- ci: use tox-lsr 3.12.0 for osbuild_config.yml feature (#200)
+- test: only reinstall openssh-clients if necessary (#201)
+- ci: use JSON format for __bootc_validation (#202)
+- ci: Bump actions/github-script from 7 to 8 (#203)
+
 [1.6.0] - 2025-06-23
 --------------------
 

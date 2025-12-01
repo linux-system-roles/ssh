@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: checkout PR
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - run: "sed -i -e 's/ansible.posix.//g' */*.yml */*/*.yml"
 
@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: checkout PR
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: ansible check with centos 8
         uses: roles-ansible/check-ansible-centos-centos8-action@master
@@ -36,7 +36,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: checkout PR
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: ansible check with centos 9
         uses: roles-ansible/check-ansible-centos-centos9-action@main
@@ -49,7 +49,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: checkout PR
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: ansible check with centos 10
         uses: roles-ansible/check-ansible-centos-centos10-action@main

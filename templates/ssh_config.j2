@@ -156,6 +156,7 @@ Match {{ match["Condition"] }}
 {{       render_option("User", match["User"], true) -}}
 {{       render_option("UserKnownHostsFile", match["UserKnownHostsFile"], true) -}}
 {{       render_option("VerifyHostKeyDNS", match["VerifyHostKeyDNS"], true) -}}
+{{       render_option("VersionAddendum", match["VersionAddendum"], true) -}}
 {{       render_option("VisualHostKey", match["VisualHostKey"], true) -}}
 {{       render_option("XAuthLocation", match["XAuthLocation"], true) -}}
 {%     endfor %}
@@ -281,6 +282,7 @@ Host {{ host["Condition"] }}
 {{       render_option("User", host["User"], true) -}}
 {{       render_option("UserKnownHostsFile", host["UserKnownHostsFile"], true) -}}
 {{       render_option("VerifyHostKeyDNS", host["VerifyHostKeyDNS"], true) -}}
+{{       render_option("VersionAddendum", host["VersionAddendum"], true) -}}
 {{       render_option("VisualHostKey", host["VisualHostKey"], true) -}}
 {{       render_option("XAuthLocation", host["XAuthLocation"], true) -}}
 {%     endfor %}
@@ -399,6 +401,7 @@ Host {{ host["Condition"] }}
 {{ body_option("User", ssh_User) -}}
 {{ body_option("UserKnownHostsFile", ssh_UserKnownHostsFile) -}}
 {{ body_option("VerifyHostKeyDNS", ssh_VerifyHostKeyDNS) -}}
+{{ body_option("VersionAddendum", ssh_VersionAddendum) -}}
 {{ body_option("VisualHostKey", ssh_VisualHostKey) -}}
 {{ body_option("XAuthLocation", ssh_XAuthLocation) -}}
 {% if ssh['Match'] is defined %}

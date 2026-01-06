@@ -1,6 +1,19 @@
 Changelog
 =========
 
+[1.7.0] - 2026-01-06
+--------------------
+
+### New Features
+
+- feat: Add new configuration option VersionAddendum (#214)
+
+### Other Changes
+
+- ci: Bump actions/checkout from 5 to 6 (#211)
+- ci: add qemu tests for Fedora 43, drop Fedora 41 (#212)
+- ci: Bump actions/upload-artifact from 5 to 6 (#213)
+
 [1.6.2] - 2025-11-17
 --------------------
 

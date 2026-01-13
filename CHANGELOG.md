@@ -1,6 +1,14 @@
 Changelog
 =========
 
+[1.7.1] - 2026-01-13
+--------------------
+
+### Other Changes
+
+- refactor: handle INJECT_FACTS_AS_VARS=false by using ansible_facts instead (#216)
+- ci: use ANSIBLE_INJECT_FACT_VARS=false by default for testing (#217)
+
 [1.7.0] - 2026-01-06
 --------------------
 

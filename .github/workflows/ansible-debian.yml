@@ -6,6 +6,9 @@ on:  # yamllint disable-line rule:truthy
 
 jobs:
   debian-bullseye:
+    if: |
+      !((github.event_name == 'pull_request' && contains(github.event.pull_request.title, '[citest_skip]')) ||
+        (github.event_name == 'push' && contains(github.event.head_commit.message, '[citest_skip]')))
     runs-on: ubuntu-latest
     steps:
       - name: checkout PR
@@ -19,6 +22,9 @@ jobs:
           targets: "tests/tests_*.yml"
 
   debian-buster:
+    if: |
+      !((github.event_name == 'pull_request' && contains(github.event.pull_request.title, '[citest_skip]')) ||
+        (github.event_name == 'push' && contains(github.event.head_commit.message, '[citest_skip]')))
     runs-on: ubuntu-latest
     steps:
       - name: checkout PR

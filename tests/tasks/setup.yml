@@ -20,7 +20,7 @@
   vars:
     __ssh_test_packages: >-
       {{
-        "openssh-clients" if ansible_facts['os_family'] == 'RedHat'
+        "openssh-clients" if ansible_facts['os_family'] in ['RedHat', 'Suse']
         else "openssh-client"
       }}
   package:
@@ -41,7 +41,8 @@
     main_ssh_config_name: 00-ansible.conf
     main_ssh_config_path: /etc/ssh/ssh_config.d/
   when:
-    - (ansible_facts['os_family'] == 'RedHat'
+    - ansible_facts['os_family'] == 'Suse' or
+      (ansible_facts['os_family'] == 'RedHat'
         and ansible_facts['distribution_major_version'] | int >= 8) or
       (ansible_facts['distribution'] == 'Ubuntu'
         and ansible_facts['distribution_major_version'] | int >= 20)

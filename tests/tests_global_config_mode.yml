@@ -6,6 +6,10 @@
     __ssh_test_backup_files:
       - /etc/ssh/ssh_config.d/00-ansible.conf
       - /etc/ssh/ssh_config
+        # SUSE Minimal VM images do not have the daemon user
+    __ssh_test_owner: >-
+      {{ 'nobody' if ansible_facts['os_family'] == 'Suse'
+         else 'daemon' }}
 
   tasks:
     - name: Backup configuration files
@@ -19,8 +23,8 @@
           Compression: true
           GSSAPIAuthentication: false
         # bad example
-        ssh_config_owner: daemon
-        ssh_config_group: daemon
+        ssh_config_owner: "{{ __ssh_test_owner }}"
+        ssh_config_group: "{{ __ssh_test_owner }}"
         ssh_config_mode: 600
 
     - name: Verify the configuration file was created with right content
@@ -46,8 +50,8 @@
           assert:
             that:
               - config_mode.stat.exists
-              - config_mode.stat.gr_name == 'daemon'
-              - config_mode.stat.pw_name == 'daemon'
+              - config_mode.stat.gr_name == __ssh_test_owner
+              - config_mode.stat.pw_name == __ssh_test_owner
               - config_mode.stat.mode == '0600'
 
     - name: Restore configuration files

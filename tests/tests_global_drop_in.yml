@@ -11,7 +11,8 @@
     - name: Skip if the system does not support drop in directory
       meta: end_host
       when:
-        - ansible_facts['distribution'] != 'Fedora' and
+        - ansible_facts['os_family'] != 'Suse' and
+          ansible_facts['distribution'] != 'Fedora' and
           not (ansible_facts['distribution'] in ['RedHat','CentOS'] and
                ansible_facts['distribution_version'] | int >= 8)
 
@@ -56,6 +57,12 @@
               - "'Include' not in config.content | b64decode"
               - "'SendEnv' not in config.content | b64decode"
 
+        - name: Check if main configuration file exists
+          stat:
+            path: "/etc/ssh/ssh_config"
+          register: global_config_stat
+          when: global_config_stat.stat.exists
+
         - name: Download the main configuration file too
           slurp:
             src: "/etc/ssh/ssh_config"
@@ -69,6 +76,7 @@
               - "'User somebody' not in content"
           vars:
             content: "{{ global_config.content | b64decode }}"
+          when: global_config_stat.stat.exists
 
         - name: Verify the file has default sensible permissions
           assert:

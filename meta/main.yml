@@ -44,6 +44,7 @@ galaxy_info:
     - el9
     - el10
     - fedora
+    - leap
     - networking
     - openssh
     - redhat

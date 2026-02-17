@@ -11,6 +11,7 @@ supported by ansible. The role was tested on:
 
 * RHEL/CentOS 6, 7, 8, 9, 10
 * Fedora
+* SUSE/openSUSE
 * Debian
 * Ubuntu
 

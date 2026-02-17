@@ -9,7 +9,8 @@
     __ssh_test_option: >-
       {% if ansible_facts['os_family'] in ['Ubuntu', 'Debian'] %}
         HashKnownHosts yes
-      {% elif ansible_facts['distribution'] == 'Fedora' or
+      {% elif ansible_facts['os_family'] == 'Suse' or
+           ansible_facts['distribution'] == 'Fedora' or
            (ansible_facts['distribution'] in ['RedHat', 'CentOS'] and
             ansible_facts['distribution_version'] | int >= 8) %}
         Include /etc/ssh/ssh_config.d/*.conf

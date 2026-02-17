@@ -22,7 +22,7 @@
       set_fact:
         ssh_test_package: openssh-client
       when: >
-        ansible_facts['os_family'] != 'RedHat'
+        ansible_facts['os_family'] not in ['RedHat', 'Suse']
 
     - name: Determine if system is ostree and set flag
       when: not __ssh_is_ostree is defined
@@ -66,6 +66,16 @@
         state: present
         use: "{{ (__ssh_is_ostree | d(false)) |
                  ternary('ansible.posix.rhel_rpm_ostree', omit) }}"
+
+    - name: Check if ssh_config man page is available
+      command: man -w ssh_config
+      register: __ssh_man_check
+      failed_when: false
+      changed_when: false
+
+    - name: Skip if ssh_config man page is not available
+      meta: end_host
+      when: __ssh_man_check.rc != 0
 
     - name: Get list of options from manual page
       shell: >-

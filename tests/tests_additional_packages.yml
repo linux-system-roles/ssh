@@ -9,6 +9,8 @@
         openssh-ldap
       {% elif ansible_facts['os_family'] == 'RedHat' %}
         openssh-keycat
+      {% elif ansible_facts['os_family'] == 'Suse' %}
+        openssh-helpers
       {% else %}
         openssh-tests
       {% endif %}

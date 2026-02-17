@@ -61,12 +61,12 @@
           stat:
             path: "/etc/ssh/ssh_config"
           register: global_config_stat
-          when: global_config_stat.stat.exists
 
         - name: Download the main configuration file too
           slurp:
             src: "/etc/ssh/ssh_config"
           register: global_config
+          when: global_config_stat.stat.exists
 
         - name: Verify the options are NOT in the global configuration file
           assert:

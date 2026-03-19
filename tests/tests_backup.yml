@@ -22,8 +22,7 @@
       with_items: "{{ backup_files.files }}"
 
     - name: Configure ssh without creating backup
-      ansible.builtin.include_role:
-        name: linux-system-roles.ssh
+      include_tasks: tasks/run_role_with_clear_facts.yml
       vars:
         ssh_backup: false
 
@@ -34,8 +33,7 @@
       register: no_backup
 
     - name: Configure ssh again with different configuration and with backup
-      ansible.builtin.include_role:
-        name: linux-system-roles.ssh
+      include_tasks: tasks/run_role_with_clear_facts.yml
       vars:
         ssh_ForwardX11Trusted: 'yes'  # noqa var-naming
       register: second_run

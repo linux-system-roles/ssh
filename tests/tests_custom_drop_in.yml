@@ -1,7 +1,6 @@
 ---
 - name: Test we can write any other configuration file as a drop-in
   hosts: all
-  gather_facts: true
   vars:
     __ssh_test_backup_files:
       - /tmp/ssh_config.d_00-ansible.conf
@@ -21,8 +20,7 @@
       include_tasks: tasks/backup.yml
 
     - name: Run role
-      include_role:
-        name: linux-system-roles.ssh
+      include_tasks: tasks/run_role_with_clear_facts.yml
       vars:
         ssh:
           Compression: true

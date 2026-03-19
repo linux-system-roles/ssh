@@ -1,7 +1,6 @@
 ---
 - name: Verify default packages as well as additional are installed
   hosts: all
-  gather_facts: true
   vars:
     additional_package: >-
       {% if ansible_facts['distribution'] in [ 'RedHat', 'CentOS' ] and
@@ -16,8 +15,7 @@
       {% endif %}
   tasks:
     - name: Run role
-      include_role:
-        name: linux-system-roles.ssh
+      include_tasks: tasks/run_role_with_clear_facts.yml
       vars:
         ssh_additional_packages:
           - "{{ additional_package | trim }}"

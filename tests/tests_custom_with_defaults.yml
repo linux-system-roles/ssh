@@ -3,8 +3,7 @@
   hosts: all
   tasks:
     - name: Run role
-      include_role:
-        name: linux-system-roles.ssh
+      include_tasks: tasks/run_role_with_clear_facts.yml
       vars:
         ssh:
           Compression: true

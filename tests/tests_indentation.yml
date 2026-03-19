@@ -1,6 +1,5 @@
 ---
 - name: Test indentation
-  gather_facts: true
   hosts: all
   vars:
     ssh_config_file: /tmp/ssh_config
@@ -9,8 +8,7 @@
       include_tasks: tasks/backup.yml
 
     - name: Run role
-      include_role:
-        name: linux-system-roles.ssh
+      include_tasks: tasks/run_role_with_clear_facts.yml
       vars:
         # noqa var-naming
         ssh:

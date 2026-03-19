@@ -11,9 +11,11 @@
 
 - name: Ensure that the role runs with default parameters
   hosts: all
-  gather_facts: false
-  roles:
-    - linux-system-roles.ssh
+  tasks:
+    - name: Run role
+      include_tasks: tasks/run_role_with_clear_facts.yml
+      vars:
+        __sr_public: true
 
 - name: Restore configuration files
   hosts: all

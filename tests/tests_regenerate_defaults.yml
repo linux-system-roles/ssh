@@ -1,7 +1,6 @@
 ---
 - name: Regenerate default configuration file
   hosts: all
-  gather_facts: true
   vars:
     __ssh_test_backup_files:
       - /etc/ssh/ssh_config.d/00-ansible.conf
@@ -36,8 +35,7 @@
         path: /etc/ssh/ssh_config
 
     - name: Run role
-      include_role:
-        name: linux-system-roles.ssh
+      include_tasks: tasks/run_role_with_clear_facts.yml
       vars:
         ssh_config_file: /etc/ssh/ssh_config
         ssh_skip_defaults: false

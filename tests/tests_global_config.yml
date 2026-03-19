@@ -1,6 +1,5 @@
 ---
 - name: Test we can write global config with default configuration
-  gather_facts: true
   hosts: all
   vars:
     __ssh_test_backup_files:
@@ -12,8 +11,7 @@
       include_tasks: tasks/backup.yml
 
     - name: Run role
-      include_role:
-        name: linux-system-roles.ssh
+      include_tasks: tasks/run_role_with_clear_facts.yml
       vars:
         # noqa var-naming
         ssh:

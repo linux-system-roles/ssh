@@ -1,7 +1,6 @@
 ---
 - name: Test we can handle all configuration options documented in manual page
   hosts: all
-  gather_facts: true
   vars:
     ssh_c: {}
     pkg_mgr: "{{ (ansible_facts['distribution_version'] | int > 7) |
@@ -102,8 +101,7 @@
         "{{ ssh_options.stdout_lines }}"
 
     - name: Run role
-      include_role:
-        name: linux-system-roles.ssh
+      include_tasks: tasks/run_role_with_clear_facts.yml
       vars:
         __ssh_supports_validate: false
         ssh_config_file: /etc/test_ssh_config

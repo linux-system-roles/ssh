@@ -82,3 +82,9 @@
     __ssh_config_mode: "{{ ssh_config_mode if ssh_config_mode is not none
       else '0600' if ssh_user is not none
       else '0644' }}"
+
+- name: Record role success fingerprint
+  sr_fingerprint:
+    sr_message: >-
+      success system_role:ssh ansible_version={{ ansible_version.full }}
+      {{ ansible_facts['distribution'] }}-{{ ansible_facts['distribution_version'] }}

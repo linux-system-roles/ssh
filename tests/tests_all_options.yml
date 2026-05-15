@@ -54,6 +54,17 @@
         - not __ssh_is_ostree | bool
       changed_when: true
 
+    - name: Make sure manual pages and bash are installed on Alpine
+      ansible.builtin.package:
+        name:
+          - mandoc
+          - man-pages
+          - openssh-doc
+          - bash
+        state: present
+      when:
+        - ansible_facts['distribution'] == "Alpine"
+
     - name: Make sure manual pages, gawk and bash are installed
       package:
         name:
@@ -65,6 +76,8 @@
         state: present
         use: "{{ (__ssh_is_ostree | d(false)) |
                  ternary('ansible.posix.rhel_rpm_ostree', omit) }}"
+      when:
+        - ansible_facts['distribution'] != "Alpine"
 
     - name: Check if ssh_config man page is available
       command: man -w ssh_config

@@ -1,0 +1,39 @@
+name: Ansible CI
+on: [push, pull_request]
+
+env:
+  ANSIBLE_INJECT_FACT_VARS: "false"
+
+jobs:
+  test:
+    if: |
+      !((github.event_name == 'pull_request' && contains(github.event.pull_request.title, '[citest_skip]')) ||
+        (github.event_name == 'push' && contains(github.event.head_commit.message, '[citest_skip]')))
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os_image:
+          - alpine:latest
+          - quay.io/centos/centos:stream8
+          - quay.io/centos/centos:stream9
+          - quay.io/centos/centos:stream10
+          - debian:bullseye
+          - debian:bookworm
+          - debian:latest
+          - fedora:latest
+          - ubuntu:22.04
+          - ubuntu:24.04
+          - ubuntu:latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Test Ansible SSH Role
+        uses: Jakuje/check-ansible-action@main
+        with:
+          image: ${{ matrix.os_image }}
+          group: local
+          hosts: localhost
+          targets: "tests/tests_*.yml"

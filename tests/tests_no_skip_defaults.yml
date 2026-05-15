@@ -13,6 +13,8 @@
            (ansible_facts['distribution'] in ['RedHat', 'CentOS'] and
             ansible_facts['distribution_version'] | int >= 8) %}
         Include /etc/ssh/ssh_config.d/*.conf
+      {% elif ansible_facts['os_family'] == 'Alpine' %}
+        Include /etc/ssh/ssh_config.d/
       {% else %}
         GSSAPIAuthentication yes
       {% endif %}

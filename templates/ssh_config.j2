@@ -128,6 +128,7 @@ Match {{ match["Condition"] }}
 {{       render_option("PubkeyAcceptedKeyTypes", match["PubkeyAcceptedKeyTypes"], true) -}}
 {{       render_option("PubkeyAcceptedAlgorithms", match["PubkeyAcceptedAlgorithms"], true) -}}
 {{       render_option("PubkeyAuthentication", match["PubkeyAuthentication"], true) -}}
+{{       render_option("RefuseConnection", match["RefuseConnection"], true) -}}
 {{       render_option("RekeyLimit", match["RekeyLimit"], true) -}}
 {{       render_option("RemoteCommand", match["RemoteCommand"], true) -}}
 {{       render_option("RemoteForward", match["RemoteForward"], true) -}}
@@ -158,6 +159,7 @@ Match {{ match["Condition"] }}
 {{       render_option("VerifyHostKeyDNS", match["VerifyHostKeyDNS"], true) -}}
 {{       render_option("VersionAddendum", match["VersionAddendum"], true) -}}
 {{       render_option("VisualHostKey", match["VisualHostKey"], true) -}}
+{{       render_option("WarnWeakCrypto", match["WarnWeakCrypto"], true) -}}
 {{       render_option("XAuthLocation", match["XAuthLocation"], true) -}}
 {%     endfor %}
 {%   endif %}
@@ -254,6 +256,7 @@ Host {{ host["Condition"] }}
 {{       render_option("PubkeyAcceptedKeyTypes", host["PubkeyAcceptedKeyTypes"], true) -}}
 {{       render_option("PubkeyAcceptedAlgorithms", host["PubkeyAcceptedAlgorithms"], true) -}}
 {{       render_option("PubkeyAuthentication", host["PubkeyAuthentication"], true) -}}
+{{       render_option("RefuseConnection", host["RefuseConnection"], true) -}}
 {{       render_option("RekeyLimit", host["RekeyLimit"], true) -}}
 {{       render_option("RemoteCommand", host["RemoteCommand"], true) -}}
 {{       render_option("RemoteForward", host["RemoteForward"], true) -}}
@@ -284,6 +287,7 @@ Host {{ host["Condition"] }}
 {{       render_option("VerifyHostKeyDNS", host["VerifyHostKeyDNS"], true) -}}
 {{       render_option("VersionAddendum", host["VersionAddendum"], true) -}}
 {{       render_option("VisualHostKey", host["VisualHostKey"], true) -}}
+{{       render_option("WarnWeakCrypto", host["WarnWeakCrypto"], true) -}}
 {{       render_option("XAuthLocation", host["XAuthLocation"], true) -}}
 {%     endfor %}
 {%   endif %}
@@ -373,6 +377,7 @@ Host {{ host["Condition"] }}
 {{ body_option("PubkeyAcceptedKeyTypes", ssh_PubkeyAcceptedKeyTypes) -}}
 {{ body_option("PubkeyAcceptedAlgorithms", ssh_PubkeyAcceptedAlgorithms) -}}
 {{ body_option("PubkeyAuthentication", ssh_PubkeyAuthentication) -}}
+{{ body_option("RefuseConnection", ssh_RefuseConnection) -}}
 {{ body_option("RekeyLimit", ssh_RekeyLimit) -}}
 {{ body_option("RemoteCommand", ssh_RemoteCommand) -}}
 {{ body_option("RemoteForward", ssh_RemoteForward) -}}
@@ -403,6 +408,7 @@ Host {{ host["Condition"] }}
 {{ body_option("VerifyHostKeyDNS", ssh_VerifyHostKeyDNS) -}}
 {{ body_option("VersionAddendum", ssh_VersionAddendum) -}}
 {{ body_option("VisualHostKey", ssh_VisualHostKey) -}}
+{{ body_option("WarnWeakCrypto", ssh_WarnWeakCrypto) -}}
 {{ body_option("XAuthLocation", ssh_XAuthLocation) -}}
 {% if ssh['Match'] is defined %}
 {{   match_block(ssh['Match']) -}}

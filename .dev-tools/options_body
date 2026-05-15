@@ -83,6 +83,7 @@ ProxyUseFdpass
 PubkeyAcceptedKeyTypes
 PubkeyAcceptedAlgorithms
 PubkeyAuthentication
+RefuseConnection
 RekeyLimit
 RemoteCommand
 RemoteForward
@@ -113,4 +114,5 @@ UserKnownHostsFile
 VerifyHostKeyDNS
 VersionAddendum
 VisualHostKey
+WarnWeakCrypto
 XAuthLocation

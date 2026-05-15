@@ -10,6 +10,8 @@
         openssh-keycat
       {% elif ansible_facts['os_family'] == 'Suse' %}
         openssh-helpers
+      {% elif ansible_facts['os_family'] == 'Alpine' %}
+        openssh-sk-helper
       {% else %}
         openssh-tests
       {% endif %}

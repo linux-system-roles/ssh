@@ -26,6 +26,8 @@ __ssh_required_facts:
 __ssh_required_facts_subsets: "{{ ['!all', '!min'] +
   __ssh_required_facts }}"
 
+__ssh_write_log_file: false
+
 # BEGIN - DO NOT EDIT THIS BLOCK - rh distros variables
 # Ansible distribution identifiers that the role treats like RHEL
 __ssh_rh_distros:

@@ -1,0 +1,117 @@
+# SPDX-License-Identifier: MIT
+---
+argument_specs:
+  main:
+    short_description: The ssh role.
+    description: >
+      The ssh role allows you to configure the OpenSSH client, either
+      system-wide, using a drop-in configuration file, or for a
+      specific user.
+
+      This role installs the required packages and generates an SSH
+      client configuration file from the options given in `ssh`,
+      including any `Match` and `Host` conditional blocks. Individual
+      `ssh_<OptionName>` variables (such as `ssh_ForwardX11`) are also
+      supported and override the corresponding key in `ssh`.
+    options:
+      ssh_user:
+        type: str
+        default: null
+        description: >
+          Whether to manage the global SSH client configuration or a
+          single user's configuration. When `null`, the role manages
+          the system-wide configuration. Otherwise, this is the name
+          of a user whose per-user configuration file
+          (`~/.ssh/config`) will be managed. The user must already
+          exist on the managed host.
+      ssh_skip_defaults:
+        type: raw
+        default: auto
+        description: >
+          Whether the generated configuration file keeps the OS
+          default values for options that are not explicitly set.
+          Accepts `true` to keep OS defaults, `false` to omit them,
+          or `auto` to let the role decide: defaults are omitted when
+          writing a drop-in file or a per-user configuration file, and
+          kept otherwise.
+      ssh_drop_in_name:
+        type: str
+        default: null
+        description: >
+          The name used to build the path of the drop-in
+          configuration file placed in the system-wide SSH client
+          drop-in directory, following the template
+          `/etc/ssh/ssh_config.d/{name}.conf`. The suggested format is
+          `NN-name`, where `NN` is a two-digit number used for
+          sorting. Ignored on platforms that do not support a drop-in
+          directory.
+      ssh:
+        type: raw
+        default: []
+        description: >
+          A dict of SSH client configuration options and their
+          values, keyed by the option name as documented in
+          `ssh_config(5)`, such as `Compression`, `ControlMaster`,
+          `GSSAPIAuthentication`, or `Ciphers`. A value can be a
+          boolean, a string, a number, or a list of strings, depending
+          on the option. The special keys `Match` and `Host` accept a
+          single dict or a list of dicts describing conditional
+          configuration blocks; each dict must contain a `Condition`
+          key plus any of the same option keys, and is rendered as a
+          `Match <Condition>` or `Host <Condition>` block. Accepts an
+          empty list when no options are being set.
+      ssh_additional_packages:
+        type: list
+        elements: str
+        default: []
+        description: >
+          List of extra package names to install in addition to the
+          packages the role installs automatically, such as
+          `openssh-keysign` or `openssh-askpass`, needed for less
+          common use cases like host-based authentication.
+      ssh_config_owner:
+        type: str
+        default: null
+        description: >
+          The user name or user id that owns the generated
+          configuration file. When unset, ownership defaults to the
+          value of `ssh_user`, or `root` when `ssh_user` is not set.
+      ssh_config_group:
+        type: str
+        default: null
+        description: >
+          The group name or group id that owns the generated
+          configuration file. When unset, group ownership defaults to
+          the value of `ssh_user`, or `root` when `ssh_user` is not
+          set.
+      ssh_config_mode:
+        type: raw
+        default: null
+        description: >
+          The file system permissions for the generated configuration
+          file. Accepts a string (such as `'0644'`) or an integer.
+          When unset, mode defaults to `0600` for per-user
+          configuration or `0644` for system-wide configuration.
+      ssh_config_file:
+        type: path
+        default: null
+        description: >
+          The path of the configuration file that will be written by
+          the role. When unset, the path is derived from
+          `ssh_drop_in_name` and `ssh_user`.
+      ssh_backup:
+        type: bool
+        default: true
+        description: >
+          Whether to create a backup of the existing configuration
+          file before overwriting it.
+      ssh_transactional_update_reboot_ok:
+        type: raw
+        default: null
+        description: >
+          Whether to allow a reboot required by transactional update
+          systems after installing packages. Set to `true` to allow
+          the reboot, or `false` to have the role notify that a
+          reboot is required without performing it. Accepts a boolean
+          value or `null`. When left unset (`null`), the role fails to
+          ensure the reboot requirement is not overlooked.

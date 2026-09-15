@@ -1,0 +1,45 @@
+# SPDX-License-Identifier: MIT
+---
+- name: Assert ssh_skip_defaults is 'auto' or a boolean
+  ansible.builtin.assert:
+    that:
+      - >-
+        (ssh_skip_defaults == 'auto')
+        or (ssh_skip_defaults is sameas true)
+        or (ssh_skip_defaults is sameas false)
+    fail_msg: >-
+      ssh_skip_defaults must be 'auto' or a boolean,
+      got {{ ssh_skip_defaults | type_debug }}
+  when: ssh_skip_defaults is defined
+
+- name: Assert ssh is a dict or an empty list
+  ansible.builtin.assert:
+    that:
+      - >-
+        ssh is mapping
+        or (ssh is sequence and ssh is not string
+            and ssh is not mapping and ssh | length == 0)
+    fail_msg: >-
+      ssh must be a dict or an empty list,
+      got {{ ssh | type_debug }}
+  when: ssh is defined
+
+- name: Assert ssh_config_mode is a string or integer
+  ansible.builtin.assert:
+    that:
+      - (ssh_config_mode | type_debug) in ['str', 'int', 'unicode']
+    fail_msg: >-
+      ssh_config_mode must be a string or integer,
+      got {{ ssh_config_mode | type_debug }}
+  when: ssh_config_mode is not none
+
+- name: Assert ssh_transactional_update_reboot_ok is null or a boolean
+  ansible.builtin.assert:
+    that:
+      - >-
+        (ssh_transactional_update_reboot_ok is none)
+        or (ssh_transactional_update_reboot_ok is sameas true)
+        or (ssh_transactional_update_reboot_ok is sameas false)
+    fail_msg: >-
+      ssh_transactional_update_reboot_ok must be null or a boolean,
+      got {{ ssh_transactional_update_reboot_ok | type_debug }}

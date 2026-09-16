@@ -203,5 +203,6 @@
             __invalid_input_reboot_ok_string_failed:
           tags: tests::cleanup
 
-    - name: Restore configuration files
-      ansible.builtin.include_tasks: tasks/restore.yml
+        - name: Restore configuration files
+          ansible.builtin.include_tasks: tasks/restore.yml
+          tags: tests::cleanup

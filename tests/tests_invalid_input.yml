@@ -1,0 +1,208 @@
+# SPDX-License-Identifier: MIT
+---
+- name: Verify invalid parameters are rejected
+  hosts: all
+  vars:
+    __ssh_test_backup_files:
+      - /etc/ssh/ssh_config.d/00-ansible.conf
+      - /etc/ssh/ssh_config
+  tasks:
+    - name: Backup configuration files
+      ansible.builtin.include_tasks: tasks/backup.yml
+
+    - name: Run invalid input tests
+      block:
+        # ====================================================
+        # Section 1: Verify role works with valid defaults
+        # ====================================================
+        - name: Run role with valid defaults
+          ansible.builtin.include_tasks: tasks/run_role_with_clear_facts.yml
+
+        - name: Mark valid defaults succeeded
+          ansible.builtin.set_fact:
+            __valid_defaults_succeeded: true
+
+        - name: Assert role completed with valid defaults
+          ansible.builtin.assert:
+            that:
+              - __valid_defaults_succeeded | default(false)
+            fail_msg: >-
+              Role should succeed with default parameters
+
+        # ====================================================
+        # Section 2: argument_specs validation (Ansible 2.11+)
+        # ====================================================
+        - name: Run argument specs validation tests
+          when: ansible_version.full is version("2.11", ">=")
+          block:
+            - name: Argument specs reject invalid ssh_backup type
+              block:
+                - name: Run role with ssh_backup as a non-boolean string
+                  ansible.builtin.include_tasks: tasks/run_role_with_clear_facts.yml
+                  vars:
+                    ssh_backup: not_a_bool
+              rescue:
+                - name: Mark invalid ssh_backup rejected
+                  ansible.builtin.set_fact:
+                    __invalid_input_backup_type_failed: true
+
+            - name: Assert invalid ssh_backup type failed validation
+              ansible.builtin.assert:
+                that:
+                  - __invalid_input_backup_type_failed | default(false)
+                fail_msg: >-
+                  meta/argument_specs should reject ssh_backup values
+                  that are not booleans
+
+            - name: Argument specs reject invalid ssh_additional_packages type
+              block:
+                - name: Run role with ssh_additional_packages as a dict
+                  ansible.builtin.include_tasks: tasks/run_role_with_clear_facts.yml
+                  vars:
+                    ssh_additional_packages:
+                      not: a_list
+              rescue:
+                - name: Mark invalid ssh_additional_packages rejected
+                  ansible.builtin.set_fact:
+                    __invalid_input_additional_packages_type_failed: true
+
+            - name: Assert invalid ssh_additional_packages type failed validation
+              ansible.builtin.assert:
+                that:
+                  - __invalid_input_additional_packages_type_failed | default(false)
+                fail_msg: >-
+                  meta/argument_specs should reject ssh_additional_packages
+                  values that cannot be converted to a list
+
+        # ====================================================
+        # Section 3: assert_role_vars validation (all versions)
+        # ====================================================
+        - name: Assert rejects ssh_skip_defaults with an invalid value
+          block:
+            - name: Run role with ssh_skip_defaults as an invalid string
+              ansible.builtin.include_tasks: tasks/run_role_with_clear_facts.yml
+              vars:
+                ssh_skip_defaults: sometimes
+          rescue:
+            - name: Mark invalid ssh_skip_defaults rejected
+              ansible.builtin.set_fact:
+                __invalid_input_skip_defaults_value_failed: true
+              when: >-
+                'ssh_skip_defaults must be' in
+                (ansible_failed_result | default({}) | to_json)
+
+        - name: Assert ssh_skip_defaults invalid value failed validation
+          ansible.builtin.assert:
+            that:
+              - __invalid_input_skip_defaults_value_failed | default(false)
+            fail_msg: >-
+              tasks/assert_role_vars.yml should reject ssh_skip_defaults
+              values that are not 'auto' or a boolean
+
+        - name: Assert rejects ssh as a non-empty list
+          block:
+            - name: Run role with ssh as a non-empty list
+              ansible.builtin.include_tasks: tasks/run_role_with_clear_facts.yml
+              vars:
+                ssh:
+                  - Compression
+                  - true
+          rescue:
+            - name: Mark ssh non-empty list rejected
+              ansible.builtin.set_fact:
+                __invalid_input_ssh_list_failed: true
+              when: >-
+                'ssh must be a dict' in
+                (ansible_failed_result | default({}) | to_json)
+
+        - name: Assert ssh as non-empty list failed validation
+          ansible.builtin.assert:
+            that:
+              - __invalid_input_ssh_list_failed | default(false)
+            fail_msg: >-
+              tasks/assert_role_vars.yml should reject ssh when it is a
+              non-empty list instead of a dict or an empty list
+
+        - name: Assert rejects ssh as a string
+          block:
+            - name: Run role with ssh as a string
+              ansible.builtin.include_tasks: tasks/run_role_with_clear_facts.yml
+              vars:
+                ssh: not_a_dict_or_list
+          rescue:
+            - name: Mark ssh string rejected
+              ansible.builtin.set_fact:
+                __invalid_input_ssh_string_failed: true
+              when: >-
+                'ssh must be a dict' in
+                (ansible_failed_result | default({}) | to_json)
+
+        - name: Assert ssh as string failed validation
+          ansible.builtin.assert:
+            that:
+              - __invalid_input_ssh_string_failed | default(false)
+            fail_msg: >-
+              tasks/assert_role_vars.yml should reject ssh when it is a
+              string instead of a dict or an empty list
+
+        - name: Assert rejects ssh_config_mode as a boolean
+          block:
+            - name: Run role with ssh_config_mode as a boolean
+              ansible.builtin.include_tasks: tasks/run_role_with_clear_facts.yml
+              vars:
+                ssh_config_mode: true
+          rescue:
+            - name: Mark ssh_config_mode boolean rejected
+              ansible.builtin.set_fact:
+                __invalid_input_config_mode_bool_failed: true
+              when: >-
+                'ssh_config_mode must be' in
+                (ansible_failed_result | default({}) | to_json)
+
+        - name: Assert ssh_config_mode as boolean failed validation
+          ansible.builtin.assert:
+            that:
+              - __invalid_input_config_mode_bool_failed | default(false)
+            fail_msg: >-
+              tasks/assert_role_vars.yml should reject ssh_config_mode
+              when it is a boolean instead of a string or integer
+
+        - name: Assert rejects ssh_transactional_update_reboot_ok as a string
+          block:
+            - name: Run role with ssh_transactional_update_reboot_ok as a string
+              ansible.builtin.include_tasks: tasks/run_role_with_clear_facts.yml
+              vars:
+                ssh_transactional_update_reboot_ok: not_a_bool
+          rescue:
+            - name: Mark ssh_transactional_update_reboot_ok string rejected
+              ansible.builtin.set_fact:
+                __invalid_input_reboot_ok_string_failed: true
+              when: >-
+                'ssh_transactional_update_reboot_ok must be' in
+                (ansible_failed_result | default({}) | to_json)
+
+        - name: Assert ssh_transactional_update_reboot_ok as string failed validation
+          ansible.builtin.assert:
+            that:
+              - __invalid_input_reboot_ok_string_failed | default(false)
+            fail_msg: >-
+              tasks/assert_role_vars.yml should reject
+              ssh_transactional_update_reboot_ok when it is a string
+              instead of null or a boolean
+
+      always:
+        - name: Clear test facts
+          ansible.builtin.set_fact:
+            __valid_defaults_succeeded:
+            __invalid_input_backup_type_failed:
+            __invalid_input_additional_packages_type_failed:
+            __invalid_input_skip_defaults_value_failed:
+            __invalid_input_ssh_list_failed:
+            __invalid_input_ssh_string_failed:
+            __invalid_input_config_mode_bool_failed:
+            __invalid_input_reboot_ok_string_failed:
+          tags: tests::cleanup
+
+        - name: Restore configuration files
+          ansible.builtin.include_tasks: tasks/restore.yml
+          tags: tests::cleanup

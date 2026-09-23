@@ -5,14 +5,23 @@
     __ssh_test_backup_files:
       - /etc/ssh/ssh_config.d/00-ansible.conf
       - /etc/ssh/ssh_config
-        # SUSE Minimal VM images do not have the daemon user
-    __ssh_test_owner: >-
-      {{ 'nobody' if ansible_facts['os_family'] == 'Suse'
-         else 'daemon' }}
 
   tasks:
     - name: Backup configuration files
       include_tasks: tasks/backup.yml
+
+    # NOTE: This must be a set_fact (evaluated now, while ansible_facts is
+    # still populated) rather than a play var (which is a lazy template).
+    # run_role_with_clear_facts.yml clears ansible_facts before running the
+    # role, and the role's argument_specs validation templates every passed
+    # variable before the role re-gathers facts - a lazy template here would
+    # fail with "'dict object' has no attribute 'os_family'".
+    - name: Determine expected file owner for this platform
+      ansible.builtin.set_fact:
+        # SUSE Minimal VM images do not have the daemon user
+        __ssh_test_owner: >-
+          {{ 'nobody' if ansible_facts['os_family'] == 'Suse'
+             else 'daemon' }}
 
     - name: Run role
       include_tasks: tasks/run_role_with_clear_facts.yml

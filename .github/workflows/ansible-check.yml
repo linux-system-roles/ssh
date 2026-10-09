@@ -18,7 +18,6 @@ jobs:
           - quay.io/centos/centos:stream8
           - quay.io/centos/centos:stream9
           - quay.io/centos/centos:stream10
-          - debian:bullseye
           - debian:bookworm
           - debian:latest
           - fedora:latest

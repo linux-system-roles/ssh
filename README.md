@@ -79,9 +79,10 @@ in this variable.
 ### ssh_config_file
 
 The configuration file that will be written by this role. The default is
-defined by template `/etc/ssh/ssh_config.d/{name}.conf` if system has drop-in
-directory or `/etc/ssh/ssh_config` otherwise. If `ssh_user!=null`, the
-default is `~/.ssh/config`.
+defined by template `/etc/ssh/ssh_config.d/{name}.conf` if system supports
+drop-in directory (the role creates the directory when it is missing) or
+`/etc/ssh/ssh_config` otherwise. If `ssh_user!=null`, the default is
+`~/.ssh/config`.
 
 To write `/etc/ssh/ssh_config` even if a drop-in directory is supported, set
 `ssh_drop_in_name` to `null`.

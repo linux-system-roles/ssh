@@ -13,10 +13,22 @@
              ternary('ansible.posix.rhel_rpm_ostree', omit) }}"
   register: ssh_package_result
 
+# A staged install reports ok on re-runs, so ask rpm (by provides) if it is live.
+- name: Check whether the packages are live on a transactional update system
+  command:  # noqa command-instead-of-module
+    argv: "{{ ['rpm', '-q', '--whatprovides'] + __ssh_packages +
+      ssh_additional_packages }}"
+  register: __ssh_packages_live
+  changed_when: false
+  failed_when: false
+  check_mode: false
+  when: __ssh_is_transactional
+
 - name: Handle reboot for transactional update systems
   when:
     - __ssh_is_transactional | d(false)
-    - ssh_package_result is changed
+    - ssh_package_result is changed or
+      (__ssh_packages_live.rc | d(0)) != 0
   block:
     - name: Notify user that reboot is needed to apply changes
       debug:
@@ -26,7 +38,9 @@
     - name: Reboot transactional update systems
       reboot:
         msg: Rebooting the system to apply transactional update changes.
-      when: ssh_transactional_update_reboot_ok | bool
+      when:
+        - ssh_transactional_update_reboot_ok is not none
+        - ssh_transactional_update_reboot_ok | bool
 
     - name: Fail if reboot is needed and not set
       fail:
@@ -54,6 +68,28 @@
   when:
     - ssh_user is not none
     - ansible_facts['getent_passwd'] is defined
+
+# Some systems ship no drop-in directory, only the vendor file in /usr/etc
+- name: Make sure the drop-in directory exists
+  when:
+    - ssh_config_file is none
+    - ssh_user is none
+    - ssh_drop_in_name is not none
+    - __ssh_supports_drop_in
+  block:
+    - name: Check whether the drop-in directory exists
+      stat:
+        path: "{{ __ssh_drop_in_template | dirname }}"
+      register: __ssh_drop_in_dir
+
+    - name: Create the drop-in directory
+      file:
+        path: "{{ __ssh_drop_in_template | dirname }}"
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+      when: not __ssh_drop_in_dir.stat.exists
 
 - name: Generate the configuration file
   template:

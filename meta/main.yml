@@ -48,6 +48,8 @@ galaxy_info:
     - networking
     - openssh
     - redhat
+    - sles
+    - sles16
     - ssh
     - system
     - ubuntubionic

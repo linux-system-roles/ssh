@@ -1,0 +1,65 @@
+---
+- name: Test per-user configuration for a user whose primary group has a different name
+  hosts: all
+  vars:
+    username: tester456
+    groupname: testgroup456
+  tasks:
+    - name: Create the test group
+      group:
+        name: "{{ groupname }}"
+
+    - name: Create the test user with that group as its primary group
+      user:
+        name: "{{ username }}"
+        group: "{{ groupname }}"
+
+    - name: Run the role, check results, clean up
+      block:
+        - name: Run role
+          include_tasks: tasks/run_role_with_clear_facts.yml
+          vars:
+            ssh_user: "{{ username }}"
+            ssh:
+              Host:
+                Condition: example
+                Hostname: example.com
+
+        - name: Gather information about the user
+          getent:
+            database: passwd
+            key: "{{ username }}"
+
+        - name: Stat the .ssh dir
+          stat:
+            path: "{{ ansible_facts['getent_passwd'][username][4] }}/.ssh"
+          register: ssh_dir_stat
+
+        - name: Stat the configuration file
+          stat:
+            path: "{{ ansible_facts['getent_passwd'][username][4] }}/.ssh/config"
+          register: config_stat
+
+        - name: Verify owner, group and mode
+          assert:
+            that:
+              - ssh_dir_stat.stat.exists
+              - ssh_dir_stat.stat.pw_name == username
+              - ssh_dir_stat.stat.gr_name == groupname
+              - ssh_dir_stat.stat.mode == '0700'
+              - config_stat.stat.exists
+              - config_stat.stat.pw_name == username
+              - config_stat.stat.gr_name == groupname
+              - config_stat.stat.mode == '0600'
+
+      always:
+        - name: Remove the test user
+          user:
+            name: "{{ username }}"
+            state: absent
+            remove: true
+
+        - name: Remove the test group
+          group:
+            name: "{{ groupname }}"
+            state: absent

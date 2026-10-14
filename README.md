@@ -90,8 +90,8 @@ To write `/etc/ssh/ssh_config` even if a drop-in directory is supported, set
 
 The owner, group and mode of the created configuration file. The files are
 owned by `root:root` with mode `0644` by default, unless
-`ssh_user!=null`. In that case, the mode is `0600` and owner and
-group are derived from username given in `ssh_user` variable.
+`ssh_user!=null`. In that case, the mode is `0600`, the owner is the user
+given in `ssh_user` variable and the group is the primary group of that user.
 
 ### ssh_backup
 

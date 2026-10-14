@@ -5,4 +5,22 @@ __ssh_drop_in_name: "00-ansible"
 
 # This default lists the main configuration file defaults
 __ssh_defaults:
-  Include: /etc/ssh/ssh_config.d/*.conf
+  Include:
+    - /etc/ssh/ssh_config.d/*.conf
+    - /usr/etc/ssh/ssh_config.d/*.conf
+  Host:
+    Condition: "*"
+    ForwardX11Trusted: true
+    SendEnv: "{{ __ssh_suse_send_env +
+      (__ssh_suse_send_env_16
+       if ansible_facts['distribution_major_version'] | int >= 16
+       else []) }}"
+
+__ssh_suse_send_env:
+  - LANG LC_CTYPE LC_NUMERIC LC_TIME LC_COLLATE LC_MONETARY LC_MESSAGES
+  - LC_PAPER LC_NAME LC_ADDRESS LC_TELEPHONE LC_MEASUREMENT
+  - LC_IDENTIFICATION LC_ALL
+
+__ssh_suse_send_env_16:
+  - LC_TERMINAL LC_TERMINAL_VERSION
+  - COLORTERM TERM_PROGRAM TERM_PROGRAM_VERSION

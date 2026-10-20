@@ -27,10 +27,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        uses: actions/checkout@v7.0.1
 
       - name: Test Ansible SSH Role
-        uses: Jakuje/check-ansible-action@f64d87a5598747f49294b37d7302083afbc15c76
+        uses: Jakuje/check-ansible-action@main
         with:
           image: ${{ matrix.os_image }}
           group: local

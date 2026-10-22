@@ -6,6 +6,12 @@
     __ssh_test_backup_files:
       - /etc/ssh/ssh_config.d/00-ansible.conf
       - /etc/ssh/ssh_config
+    __invalid_input_failure_messages: >-
+      {{ ([ansible_failed_result.msg | default('') | string,
+           ansible_failed_result.msg.msg | default('') | string]
+          + (ansible_failed_result.results | default([])
+             | map(attribute='msg') | map('default', '') | list))
+         | join(' ') }}
   tasks:
     - name: Backup configuration files
       ansible.builtin.include_tasks: tasks/backup.yml
@@ -45,6 +51,9 @@
                 - name: Mark invalid ssh_backup rejected
                   ansible.builtin.set_fact:
                     __invalid_input_backup_type_failed: true
+                  when: >-
+                    "argument 'ssh_backup'" in __invalid_input_failure_messages
+                    and 'convert to bool' in __invalid_input_failure_messages
 
             - name: Assert invalid ssh_backup type failed validation
               ansible.builtin.assert:
@@ -65,6 +74,10 @@
                 - name: Mark invalid ssh_additional_packages rejected
                   ansible.builtin.set_fact:
                     __invalid_input_additional_packages_type_failed: true
+                  when: >-
+                    "argument 'ssh_additional_packages'"
+                    in __invalid_input_failure_messages and
+                    'convert to list' in __invalid_input_failure_messages
 
             - name: Assert invalid ssh_additional_packages type failed validation
               ansible.builtin.assert:
@@ -88,8 +101,10 @@
               ansible.builtin.set_fact:
                 __invalid_input_skip_defaults_value_failed: true
               when: >-
-                'ssh_skip_defaults must be' in
-                (ansible_failed_result | default({}) | to_json)
+                "ssh_skip_defaults must be 'auto' or a boolean"
+                in __invalid_input_failure_messages and
+                ('got str' in __invalid_input_failure_messages or
+                 'got AnsibleUnicode' in __invalid_input_failure_messages)
 
         - name: Assert ssh_skip_defaults invalid value failed validation
           ansible.builtin.assert:
@@ -112,8 +127,8 @@
               ansible.builtin.set_fact:
                 __invalid_input_ssh_list_failed: true
               when: >-
-                'ssh must be a dict' in
-                (ansible_failed_result | default({}) | to_json)
+                'ssh must be a dict or an empty list, got list'
+                in __invalid_input_failure_messages
 
         - name: Assert ssh as non-empty list failed validation
           ansible.builtin.assert:
@@ -134,8 +149,10 @@
               ansible.builtin.set_fact:
                 __invalid_input_ssh_string_failed: true
               when: >-
-                'ssh must be a dict' in
-                (ansible_failed_result | default({}) | to_json)
+                ('ssh must be a dict or an empty list, got str'
+                 in __invalid_input_failure_messages or
+                 'ssh must be a dict or an empty list, got AnsibleUnicode'
+                 in __invalid_input_failure_messages)
 
         - name: Assert ssh as string failed validation
           ansible.builtin.assert:
@@ -156,8 +173,8 @@
               ansible.builtin.set_fact:
                 __invalid_input_config_mode_bool_failed: true
               when: >-
-                'ssh_config_mode must be' in
-                (ansible_failed_result | default({}) | to_json)
+                'ssh_config_mode must be a string or integer, got bool'
+                in __invalid_input_failure_messages
 
         - name: Assert ssh_config_mode as boolean failed validation
           ansible.builtin.assert:
@@ -178,8 +195,10 @@
               ansible.builtin.set_fact:
                 __invalid_input_reboot_ok_string_failed: true
               when: >-
-                'ssh_transactional_update_reboot_ok must be' in
-                (ansible_failed_result | default({}) | to_json)
+                'ssh_transactional_update_reboot_ok must be null or a boolean'
+                in __invalid_input_failure_messages and
+                ('got str' in __invalid_input_failure_messages or
+                 'got AnsibleUnicode' in __invalid_input_failure_messages)
 
         - name: Assert ssh_transactional_update_reboot_ok as string failed validation
           ansible.builtin.assert:

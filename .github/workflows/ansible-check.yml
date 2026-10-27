@@ -21,6 +21,8 @@ jobs:
           - debian:bookworm
           - debian:latest
           - fedora:latest
+          - opensuse/leap:16.0
+          - registry.suse.com/bci/bci-base:16.0
           - ubuntu:22.04
           - ubuntu:24.04
           - ubuntu:latest

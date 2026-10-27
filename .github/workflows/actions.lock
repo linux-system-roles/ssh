@@ -86,7 +86,7 @@ dependencies:
         repo_id: 263411323
     'jakuje/check-ansible-action@main':
         ref: 'main'
-        commit: 'sha1-f64d87a5598747f49294b37d7302083afbc15c76'
+        commit: 'sha1-7b9baca514be52ee483a1fb3df88bc15cd024f52'
         owner_id: 2694489
         repo_id: 1237976968
     'linux-system-roles/.github@main':

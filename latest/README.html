@@ -232,8 +232,9 @@ authentication), they can be specified in this variable.</p>
 <h2 id="ssh_config_file">ssh_config_file</h2>
 <p>The configuration file that will be written by this role. The default
 is defined by template <code>/etc/ssh/ssh_config.d/{name}.conf</code> if
-system has drop-in directory or <code>/etc/ssh/ssh_config</code>
-otherwise. If <code>ssh_user!=null</code>, the default is
+system supports drop-in directory (the role creates the directory when
+it is missing) or <code>/etc/ssh/ssh_config</code> otherwise. If
+<code>ssh_user!=null</code>, the default is
 <code>~/.ssh/config</code>.</p>
 <p>To write <code>/etc/ssh/ssh_config</code> even if a drop-in directory
 is supported, set <code>ssh_drop_in_name</code> to

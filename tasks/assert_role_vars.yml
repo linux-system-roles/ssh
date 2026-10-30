@@ -27,7 +27,7 @@
 - name: Assert ssh_config_mode is a string or integer
   ansible.builtin.assert:
     that:
-      - (ssh_config_mode | type_debug) in ['str', 'int', 'unicode']
+      - ssh_config_mode is string or (ssh_config_mode | type_debug) == 'int'
     fail_msg: >-
       ssh_config_mode must be a string or integer,
       got {{ ssh_config_mode | type_debug }}

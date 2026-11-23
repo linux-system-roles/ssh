@@ -1,6 +1,42 @@
 Changelog
 =========
 
+[1.10.0] - 2026-11-23
+--------------------
+
+### New Features
+
+- feat: Argument spec implementation for ssh role (#267)
+- feat: Add SLE16 support (#281)
+
+### Bug Fixes
+
+- fix: Use the primary group of ssh_user for ~/.ssh and ~/.ssh/config (#276)
+
+### Other Changes
+
+- ci: no CI test by default - implement slash commands for CI tests [citest_skip] (#270)
+- ci: ansible-test-milestone is now version 2.23 - update sanity ignore files (#271)
+- ci: allow lsr org members to run ci tests (#272)
+- ci: Run Dependabot monthly and group changes in a single PR (#273)
+- ci: bump tox-lsr version 3.21.0, myrotvorets/set-commit-status-action, support leap-16.0 (#274)
+- ci: Drop debian bullseye from CI (#275)
+- ci: use shared actions and lock workflow dependencies (#277)
+- ci: use shared actions and lock workflow dependencies (#278)
+- ci: Use order 10 for centos vault task so that it runs first (#279)
+- test: check invalid inputs for correct error message (#280)
+- docs: add AI policy; update setup-python, codeql actions (#282)
+- ci: retry centos vault repo failures using new package_retry yum/dnf plugin (#283)
+- refactor: use is string test for string type checks (#284)
+- docs: tag markdown plain text blocks correctly (#285)
+- ci: Use a fixed 5 minute backoff for CentOS vault repos (#286)
+- ci: support Fedora 45, Ansible 2.22; drop Fedora 43 (#287)
+- ci: use ubuntu 24.04 for test envs that use py39 (#288)
+- ci: use ubuntu 26.04 with podman 5.x and disable apparmor restriction (#289)
+- docs: add AGENTS.md with shared developer conventions from .github (#290)
+- docs: remove extra blank lines from .coderabbit.yaml (#291)
+- ci: update tox-lsr for support for tests/module_utils (#292)
+
 [1.9.1] - 2026-09-17
 --------------------
 

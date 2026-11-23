@@ -232,8 +232,9 @@ authentication), they can be specified in this variable.</p>
 <h2 id="ssh_config_file">ssh_config_file</h2>
 <p>The configuration file that will be written by this role. The default
 is defined by template <code>/etc/ssh/ssh_config.d/{name}.conf</code> if
-system has drop-in directory or <code>/etc/ssh/ssh_config</code>
-otherwise. If <code>ssh_user!=null</code>, the default is
+system supports drop-in directory (the role creates the directory when
+it is missing) or <code>/etc/ssh/ssh_config</code> otherwise. If
+<code>ssh_user!=null</code>, the default is
 <code>~/.ssh/config</code>.</p>
 <p>To write <code>/etc/ssh/ssh_config</code> even if a drop-in directory
 is supported, set <code>ssh_drop_in_name</code> to
@@ -244,8 +245,8 @@ ssh_config_group, ssh_config_mode</h2>
 <p>The owner, group and mode of the created configuration file. The
 files are owned by <code>root:root</code> with mode <code>0644</code> by
 default, unless <code>ssh_user!=null</code>. In that case, the mode is
-<code>0600</code> and owner and group are derived from username given in
-<code>ssh_user</code> variable.</p>
+<code>0600</code>, the owner is the user given in <code>ssh_user</code>
+variable and the group is the primary group of that user.</p>
 <h2 id="ssh_backup">ssh_backup</h2>
 <p>When set to <em>false</em>, the original <code>ssh_config</code> file
 is not backed up. Default is <em>true</em>.</p>
